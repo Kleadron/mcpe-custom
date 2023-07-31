@@ -9,6 +9,8 @@
 #include "Timer.hpp"
 #include "Utils.hpp"
 
+LARGE_INTEGER baseCounter;
+
 float getAccurateTimeMs()
 {
 	LARGE_INTEGER frequency;
@@ -17,7 +19,7 @@ float getAccurateTimeMs()
 	LARGE_INTEGER currentCounter;
 	QueryPerformanceCounter(&currentCounter);
 
-	float ms = float(((double)currentCounter.QuadPart / (double)frequency.QuadPart) * 1000);
+	float ms = float(((double)(currentCounter.QuadPart - baseCounter.QuadPart) / (double)frequency.QuadPart) * 1000);
 	return ms;
 }
 
@@ -57,5 +59,6 @@ void Timer::advanceTime()
 
 Timer::Timer()
 {
+	QueryPerformanceCounter(&baseCounter);
 	field_4 = field_8 = getAccurateTimeMs();
 }
