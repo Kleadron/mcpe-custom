@@ -46,7 +46,9 @@ public:
 	float field_C14 = 0.0f;
 	float field_C18 = 0.0f;
 	float field_C1C = 0.0f;
+#ifndef MOD_DISABLE_AUTOJUMP
 	int m_nAutoJumpFrames = 0;
+#endif
 	// multiplayer related
 	float field_C24 = 0.0f;
 	float field_C28 = 0.0f;
