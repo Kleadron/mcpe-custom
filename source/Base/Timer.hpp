@@ -17,8 +17,8 @@ public:
 
 public:
 	float field_0 = 0;
-	int field_4 = 0;
-	int field_8 = 0;
+	float field_4 = 0;
+	float field_8 = 0;
 	float field_C = 1.0f;
 	float field_10 = 20.0f;
 	int field_14 = 0;
