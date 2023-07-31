@@ -434,6 +434,16 @@ void Minecraft::tickInput()
 	Mouse::_index = -1;
 }
 
+#ifndef ORIGINAL_CODE
+void Minecraft::tickMouse()
+{
+	if (!m_bGrabbedMouse)
+		return;
+	
+	platform()->recenterMouse();
+}
+#endif
+
 void Minecraft::_levelGenerated()
 {
 	if (m_pNetEventCallback)
@@ -519,13 +529,8 @@ void Minecraft::update()
 	{
 		m_pLevel->updateLights();
 	}
-
-#ifndef ORIGINAL_CODE
-	if (m_bGrabbedMouse)
-	{
-		platform()->recenterMouse();
-	}
-#endif
+	
+	tickMouse();
 
 	m_pGameRenderer->render(m_timer.field_18);
 }
