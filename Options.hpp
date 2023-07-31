@@ -31,6 +31,7 @@
 //#define MOD_USE_FLAT_WORLD         // Use a flat world instead of the regular world generation
 //#define MOD_USE_BIGGER_SCREEN_SIZE // Use a bigger screen size instead of 854x480
 //#define MOD_DONT_COLOR_GRASS       // Don't give the top of grass tiles a different color. (like Classic)
+//#define MOD_DISABLE_AUTOJUMP       // Disable Autojump, like old Java edition
 
 // Tests
 //#define TEST_DROPPED_ITEMS      // Allow dropped items to be dropped and collected.
