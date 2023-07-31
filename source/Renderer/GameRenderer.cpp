@@ -433,7 +433,7 @@ void GameRenderer::renderLevel(float f)
 		setupFog(0);
 
 		glEnable(GL_BLEND);
-		glDisable(GL_CULL_FACE);
+		//glDisable(GL_CULL_FACE);
 
 		// render the alpha layer
 		m_pMinecraft->m_pTextures->loadAndBindTexture(C_TERRAIN_NAME);
@@ -441,7 +441,7 @@ void GameRenderer::renderLevel(float f)
 
 		glDepthMask(true);
 		
-		glEnable(GL_CULL_FACE);
+		//glEnable(GL_CULL_FACE);
 		glDisable(GL_BLEND);
 
 		if (field_44 == 1.0f && pMob->isPlayer() && m_pMinecraft->m_hitResult.m_hitType != HitResult::NONE && !pMob->isUnderLiquid(Material::water))
