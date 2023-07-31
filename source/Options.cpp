@@ -48,7 +48,11 @@ void Options::initDefaultValues()
 	field_18  = Minecraft::useAmbientOcclusion;
 #endif
 	field_240 = 1;
+#ifndef ENH_EXTREME_RENDER_DIST
 	field_10  = 2;
+#else
+	field_10 = 0;
+#endif
 	field_14  = 1;
 	m_bFancyGraphics = true;
 	field_19  = 1;
