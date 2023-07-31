@@ -32,6 +32,7 @@
 //#define MOD_USE_BIGGER_SCREEN_SIZE // Use a bigger screen size instead of 854x480
 //#define MOD_DONT_COLOR_GRASS       // Don't give the top of grass tiles a different color. (like Classic)
 #define MOD_DISABLE_AUTOJUMP       // Disable Autojump, like old Java edition
+//#define MOD_JAVA_STARTING_BLOCKS   // Replace the starting hotbar with the items from the Java b1.8 Creative mode starting hotbar
 
 // Tests
 //#define TEST_DROPPED_ITEMS      // Allow dropped items to be dropped and collected.
