@@ -1052,6 +1052,7 @@
     </ClCompile>
     <ClCompile Include="..\source\World\Tile\SpawnerTile.cpp">
       <Filter>Source Files\World\Tile</Filter>
+	</ClCompile>
     <ClCompile Include="..\platforms\windows\AppPlatform_windows.cpp">
       <Filter>Source Files\App</Filter>
     </ClCompile>
