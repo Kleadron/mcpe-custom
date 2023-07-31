@@ -38,6 +38,7 @@ public:
 	//TODO: defineSynchedData
 
 	void tick() override;
+	int move(float x, float y, float z) override;
 
 	Particle* scale(float);
 	Particle* setPower(float);
