@@ -179,6 +179,7 @@ public: // Static declarations
 		*brick,
 		*clay,
 		*reeds,
+		*spawner,
 		*paper,
 		*book,
 		*slimeBall,

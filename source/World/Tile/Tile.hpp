@@ -184,6 +184,7 @@ public: // static variables
 		* coalOre,
 		* lapisOre,
 		* reeds,
+		* spawner,
 		* ladder,
 		* obsidian,
 		* tnt,
@@ -309,6 +310,15 @@ class ClayTile : public Tile
 {
 public:
 	ClayTile(int ID, int texture, Material*);
+
+	int getResource(int, Random*) override;
+	int getResourceCount(Random*) override;
+};
+
+class SpawnerTile : public HalfTransparentTile
+{
+public:
+	SpawnerTile(int ID, int texture, Material*);
 
 	int getResource(int, Random*) override;
 	int getResourceCount(Random*) override;

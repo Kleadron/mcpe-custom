@@ -153,6 +153,7 @@ Inventory::Inventory(Player* pPlayer)
 	m_items[38] = Item::door_wood->m_itemID;
 	m_items[39] = Tile::gravel->m_ID;
 	m_items[40] = Tile::water->m_ID;
+	m_items[41] = Tile::spawner->m_ID;
 #endif
 }
 

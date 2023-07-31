@@ -397,6 +397,12 @@ void Gui::handleKeyPressed(int keyCode)
 			break;
 		}
 
+		// Toggles Flying
+		case AKEYCODE_FLIGHT:
+		{
+			m_pMinecraft->m_options.m_bFlyCheat = !m_pMinecraft->m_options.m_bFlyCheat;
+		}
+
 		case AKEYCODE_BUTTON_X:
 		{
 			int* slot = &m_pMinecraft->m_pLocalPlayer->m_pInventory->m_SelectedHotbarSlot;

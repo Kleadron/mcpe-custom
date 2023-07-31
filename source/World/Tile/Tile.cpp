@@ -298,6 +298,12 @@ void Tile::initTiles()
 		->setSoundType(Tile::SOUND_GRAVEL)
 		->setDescriptionId("clay");
 
+	Tile::spawner = (new SpawnerTile(TILE_SPAWNER, TEXTURE_SPAWNER, Material::stone))
+		->init()
+		->setDestroyTime(0.6f)
+		->setSoundType(Tile::SOUND_STONE)
+		->setDescriptionId("spawner");
+
 	Tile::farmland = (new FarmTile(TILE_FARMLAND, Material::dirt))
 		->init()
 		->setDestroyTime(0.6f)
@@ -1164,6 +1170,7 @@ Tile
 	*Tile::grass,
 	*Tile::ice,
 	*Tile::clay,
+	*Tile::spawner,
 	*Tile::farmland,
 	*Tile::stoneSlab,
 	*Tile::stoneSlabHalf,
