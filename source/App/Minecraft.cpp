@@ -536,6 +536,10 @@ void Minecraft::tick()
 
 void Minecraft::update()
 {
+#ifndef ORIGINAL_CODE
+	tickMouse();
+#endif
+
 	if (field_288 && m_pLevel)
 	{
 		float x = m_timer.field_18;
@@ -565,9 +569,6 @@ void Minecraft::update()
 	{
 		m_pLevel->updateLights();
 	}
-#ifndef ORIGINAL_CODE
-	tickMouse();
-#endif
 
 	m_pGameRenderer->render(m_timer.field_18);
 }
