@@ -268,7 +268,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLin
 			// update our stuff here:
 			g_pApp->update();
 
-			// HACK: Use DwmFlush when desktop composition is enabled on Windows Vista and 7
 			if (wantVSync)
 			{
 				if (!IsWindows8OrGreater() && IsWindowsVistaOrGreater())
