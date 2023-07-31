@@ -77,6 +77,9 @@ void TextInputBox::keyPressed(Minecraft* minecraft, int key)
 		case AKEYCODE_ARROW_RIGHT:
 			chr = '\003';
 			break;
+		case AKEYCODE_SPACE:
+			chr = ' ';
+			break;
 		case AKEYCODE_COMMA:
 			chr = bShiftPressed ? '<' : ',';
 			break;
@@ -145,6 +148,7 @@ void TextInputBox::setFocused(bool b)
 	{
 		m_lastFlashed = getTimeMs();
 		m_bCursorOn = true;
+		m_insertHead = int(m_text.size());
 	}
 }
 
@@ -236,9 +240,9 @@ void TextInputBox::render()
 	int textYPos = (m_height - 8) / 2;
 
 	if (m_text.empty())
-		drawString(m_pFont, m_placeholder, m_xPos + 1, m_xPos + 1, 0x404040);
+		drawString(m_pFont, m_placeholder, m_xPos + 1, m_yPos + 1, 0x404040);
 	else
-		drawString(m_pFont, m_text, m_xPos + 1, m_xPos + textYPos, 0xFFFFFF);
+		drawString(m_pFont, m_text, m_xPos + 1, m_yPos + textYPos, 0xFFFFFF);
 
 	if (m_bCursorOn)
 	{
@@ -247,7 +251,7 @@ void TextInputBox::render()
 		std::string substr = m_text.substr(0, m_insertHead);
 		xPos += m_pFont->width(substr);
 
-		drawString(m_pFont, "_", m_xPos + xPos, m_xPos + textYPos + 1, 0xFFFFFF);
+		drawString(m_pFont, "_", m_xPos + xPos, m_yPos + textYPos + 1, 0xFFFFFF);
 	}
 }
 

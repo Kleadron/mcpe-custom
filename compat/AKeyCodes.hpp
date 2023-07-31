@@ -55,13 +55,17 @@ enum
 	AKEYCODE_BACKSLASH = VK_OEM_5,  // '\|'
 	AKEYCODE_RIGHT_BRACKET=VK_OEM_6,// ']}'
 	AKEYCODE_APOSTROPHE = VK_OEM_7, // ''"'
+	AKEYCODE_SPACE = VK_SPACE,
 
 	AKEYCODE_0 = '0',
 	//...
 	AKEYCODE_9 = '9',
 
+	// note: You have to add these here instead of using the
+	// characters themselves, otherwise android won't pick it up
 	AKEYCODE_A = 'A',
-	//...
+	AKEYCODE_Q = 'Q',
+	AKEYCODE_T = 'T',
 	AKEYCODE_Z = 'Z',
 
 	AKEYCODE_F4 = VK_F4,

@@ -126,11 +126,13 @@ int LocalPlayer::move(float x, float y, float z)
 #endif
 
 		// autojump stuff
+#ifndef MOD_DISABLE_AUTOJUMP
 		if (m_nAutoJumpFrames > 0)
 		{
 			m_nAutoJumpFrames--;
 			m_pKeyboardInput->m_bJumpButton = true;
 		}
+#endif
 
 		float posX = m_pos.x;
 		float posY = m_pos.y;
@@ -140,6 +142,7 @@ int LocalPlayer::move(float x, float y, float z)
 		//@BUG: backing up posZ too late
 		float posZ = m_pos.z;
 
+#ifndef MOD_DISABLE_AUTOJUMP
 		if (m_nAutoJumpFrames <= 0)
 		{
 			if (Mth::floor(posX * 2) == Mth::floor(m_pos.x * 2) &&
@@ -170,6 +173,7 @@ int LocalPlayer::move(float x, float y, float z)
 			// Nope, we're walking towards a full block. Trigger an auto jump.
 			//	m_nAutoJumpFrames = 1;
 		}
+#endif
 	}
 
 	return result;
@@ -209,6 +213,10 @@ void LocalPlayer::updateAi()
 
 	field_B00 = m_pKeyboardInput->m_horzInput;
 	field_B04 = m_pKeyboardInput->m_vertInput;
-
+	
+#ifndef MOD_DISABLE_AUTOJUMP
 	field_B0C = m_pKeyboardInput->m_bJumpButton || m_nAutoJumpFrames > 0;
+#else
+	field_B0C = m_pKeyboardInput->m_bJumpButton;
+#endif
 }

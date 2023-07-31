@@ -5,9 +5,12 @@
 	The following code is licensed under the BSD 1 clause license.
 	SPDX-License-Identifier: BSD-1-Clause
  ********************************************************************/
+#define WIN32_LEAN_AND_MEAN
 
 #include <cstdarg>
 #include <WindowsX.h>
+#include <dwmapi.h>
+#include <VersionHelpers.h>
 
 #include "compat/GL.hpp"
 #include "compat/AKeyCodes.hpp"
@@ -135,6 +138,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 
 			break;
 		}
+#ifdef ENH_ALLOW_SCROLL_WHEEL
+		case WM_MOUSEWHEEL:
+			Mouse::feed(3, GET_WHEEL_DELTA_WPARAM(wParam), g_MousePosX, g_MousePosY);
+
+			break;
+#endif
 		case WM_SIZE:
 		{
 			UINT width = LOWORD(lParam);
@@ -218,6 +227,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLin
 	ShowWindow(hWnd, nCmdShow);
 	SetHWND(hWnd);
 
+	BOOL wantVSync = TRUE;
+	int glVSync = 0;
+
 	HDC hDC; HGLRC hRC;
 	// enable OpenGL for the window
 	EnableOpenGL(hWnd, &hDC, &hRC);
@@ -227,11 +239,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLin
 	if (!xglInitted())
 		goto _cleanup;
 
-	xglSwapIntervalEXT(1);
+	xglSwapIntervalEXT(glVSync);
 
 	g_pApp = new NinecraftApp;
 	g_pApp->m_pPlatform = &g_AppPlatform;
-	g_pApp->field_D58 = ".";
+	g_pApp->m_externalStorageDir = ".";
 
 	// initialize the app
 	g_pApp->init();
@@ -255,6 +267,29 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLin
 		{
 			// update our stuff here:
 			g_pApp->update();
+
+			// HACK: Use DwmFlush when desktop composition is enabled on Windows Vista and 7
+			if (wantVSync)
+			{
+				if (!IsWindows8OrGreater() && IsWindowsVistaOrGreater())
+				{
+					BOOL enabled = FALSE;
+
+					if (SUCCEEDED(DwmIsCompositionEnabled(&enabled)) && enabled)
+					{
+						xglSwapIntervalEXT(0);
+						DwmFlush();
+					}
+				}
+				else
+				{
+					xglSwapIntervalEXT(1);
+				}
+			}
+			else
+			{
+				xglSwapIntervalEXT(0);
+			}
 
 			// note: NinecraftApp would have done this with eglSwapBuffers, but I'd rather do it here:
 			SwapBuffers(hDC);

@@ -144,9 +144,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\source\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\Options.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -157,9 +154,6 @@
       <Filter>Source Files\App</Filter>
     </ClCompile>
     <ClCompile Include="..\source\App\AppPlatform.cpp">
-      <Filter>Source Files\App</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\App\AppPlatform_windows.cpp">
       <Filter>Source Files\App</Filter>
     </ClCompile>
     <ClCompile Include="..\source\App\Minecraft.cpp">
@@ -1058,6 +1052,14 @@
     </ClCompile>
     <ClCompile Include="..\source\World\Tile\SpawnerTile.cpp">
       <Filter>Source Files\World\Tile</Filter>
+    <ClCompile Include="..\platforms\windows\AppPlatform_windows.cpp">
+      <Filter>Source Files\App</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platforms\windows\main.cpp">
+      <Filter>Source Files\App</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platforms\windows\SoundSystem_windows.cpp">
+      <Filter>Source Files\App</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1068,9 +1070,6 @@
       <Filter>Header Files\App</Filter>
     </ClInclude>
     <ClInclude Include="..\source\App\AppPlatform.hpp">
-      <Filter>Header Files\App</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\App\AppPlatform_windows.hpp">
       <Filter>Header Files\App</Filter>
     </ClInclude>
     <ClInclude Include="..\source\App\Minecraft.hpp">
@@ -1918,6 +1917,12 @@
     </ClInclude>
     <ClInclude Include="..\source\World\Renderer\FallingTileRenderer.hpp">
       <Filter>Header Files\World\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platforms\windows\AppPlatform_windows.hpp">
+      <Filter>Header Files\App</Filter>
+    </ClInclude>
+    <ClInclude Include="..\GameMods.hpp">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

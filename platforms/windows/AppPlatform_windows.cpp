@@ -12,6 +12,10 @@
 #include "thirdparty/stb_image.h"
 #include "thirdparty/stb_image_write.h"
 
+#include <fstream>
+#include <sstream>
+#include <shlobj.h>
+
 extern LPCTSTR g_GameTitle;
 
 void AppPlatform_windows::initConsts()
@@ -39,7 +43,38 @@ void AppPlatform_windows::saveScreenshot(const std::string& fileName, int width,
 	glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 
 	stbi_flip_vertically_on_write(true);
-	stbi_write_png(fileName.c_str(), width, height, 4, pixels, width * 4);
+
+	// Verify if the folder exists for saving screenshots and
+	// create it if it doesn't 
+	// Kinda inefficient but I didn't want to be too intrusive 
+	// -Vruk
+	// https://stackoverflow.com/a/22182041
+
+	// https://stackoverflow.com/a/8901001
+	CHAR mypicturespath[MAX_PATH];
+	HRESULT result = SHGetFolderPath(NULL, CSIDL_MYPICTURES, NULL, SHGFP_TYPE_CURRENT, mypicturespath);
+
+	static char str[MAX_PATH];
+
+	if (result == S_OK)
+		sprintf(str, "%s\\%s", mypicturespath, "MCPE");
+	else
+		sprintf(str, "%s\\%s", ".", "Screenshots");
+
+	// https://stackoverflow.com/a/8233867
+	DWORD ftyp = GetFileAttributesA(str);
+
+	DWORD error = GetLastError();
+	if (error == ERROR_PATH_NOT_FOUND || error == ERROR_FILE_NOT_FOUND || error == ERROR_INVALID_NAME)
+	{
+		// https://stackoverflow.com/a/22182041
+		CreateDirectory(str, NULL);
+	}
+	
+	char fullpath[MAX_PATH];
+	sprintf(fullpath, "%s\\%s", str, fileName.c_str());
+
+	stbi_write_png(fullpath, width, height, 4, pixels, width * 4);
 
 	delete[] pixels;
 }
@@ -124,8 +159,32 @@ std::vector<std::string> AppPlatform_windows::getOptionStrings()
 {
 	std::vector<std::string> o;
 
-	o.push_back("mp_username");
-	o.push_back("iProgramInCpp");
+	//o.push_back("mp_username");
+	//o.push_back("iProgramInCpp");
+
+	std::ifstream ifs("options.txt");
+	if (!ifs.is_open())
+		return o;
+
+	std::string str;
+	while (true)
+	{
+		if (!std::getline(ifs, str, '\n'))
+			break;
+
+		if (str.empty() || str[0] == '#')
+			continue;
+
+		std::stringstream ss;
+		ss << str;
+
+		std::string key, value;
+		if (std::getline(ss, key, '|') && std::getline(ss, value))
+		{
+			o.push_back(key);
+			o.push_back(value);
+		}
+	}
 
 	return o;
 }

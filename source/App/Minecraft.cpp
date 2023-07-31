@@ -341,6 +341,35 @@ void Minecraft::tickInput()
 				handleMouseClick(2);
 				field_DAC = field_DA8;
 			}
+#ifdef ENH_ALLOW_SCROLL_WHEEL
+			if (input.field_0 == 3)
+			{
+				int slot = m_pLocalPlayer->m_pInventory->m_SelectedHotbarSlot;
+
+#ifdef ENH_ENABLE_9TH_SLOT
+#define MAX_ITEMS (C_MAX_HOTBAR_ITEMS - 1)
+#else
+#define MAX_ITEMS (C_MAX_HOTBAR_ITEMS - 2)
+#endif
+
+				if (input.field_4 > 0) // @NOTE: Scroll up
+				{
+					if (slot-- == 0)
+					{
+						slot = MAX_ITEMS;
+					}
+				}
+				else
+				{
+					if (slot++ == MAX_ITEMS) // @NOTE: Scroll down
+					{
+						slot = 0;
+					}
+				}
+
+				m_pLocalPlayer->m_pInventory->selectSlot(slot);
+			}
+#endif
 		}
 
 	}
@@ -379,6 +408,13 @@ void Minecraft::tickInput()
 				m_options.field_18 ^= 1;
 				Minecraft::useAmbientOcclusion = m_options.field_18;
 				m_pLevelRenderer->allChanged();
+			}
+		#endif
+		#ifdef TEST_DROPPED_ITEMS
+			else if (keyCode == AKEYCODE_Q)
+			{
+				ItemInstance inst(m_pLocalPlayer->m_pInventory->getSelectedItemId(), 1, 0);
+				m_pLocalPlayer->drop(&inst);
 			}
 		#endif
 		}
@@ -432,14 +468,17 @@ void Minecraft::tickInput()
 	Keyboard::_index = -1;
 	Mouse::_inputs.clear();
 	Mouse::_index = -1;
+}
 
 #ifndef ORIGINAL_CODE
-	if (m_bGrabbedMouse)
-	{
-		platform()->recenterMouse();
-	}
-#endif
+void Minecraft::tickMouse()
+{
+	if (!m_bGrabbedMouse)
+		return;
+	
+	platform()->recenterMouse();
 }
+#endif
 
 void Minecraft::_levelGenerated()
 {
@@ -526,6 +565,8 @@ void Minecraft::update()
 	{
 		m_pLevel->updateLights();
 	}
+	
+	tickMouse();
 
 	m_pGameRenderer->render(m_timer.field_18);
 }

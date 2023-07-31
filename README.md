@@ -8,6 +8,8 @@ via binary reverse engineering.
 
 An Android build will come soon.
 
+### The default build is **enhanced**. If you want the original experience, comment every define and uncomment the demo define from GameMods.hpp.
+
 * Note: The original mcpe01_canada.apk does not work on newer Android devices. A port of this likely will.
 
 Eventually, I plan on creating a new repository, `mcpe01_canada`, which will include just the port of the Canada demo.
@@ -19,8 +21,11 @@ Want to help this project? [Here's a list of things left to do.](TODO.md)
 ## Setup
 
 Before opening the VS2022 project or trying to build, load the sound assets into the `sound_data/` folder in the root of the project
-by running the following command:
+by **running the following command**:
 * `tools/grabsounds.py /path/to/the/mcpe01_canada/lib/armeabi-v7a/libminecraftpe.so`.
+
+After that, **copy the assets folder** from mcpe01_canada.apk, such that there is a folder called `assets` in the current directory of the executable
+(`windows_vs` if you are running from VS, or the same dir as the executable otherwise)
 
 ## Have seams when playing?
 
@@ -41,7 +46,7 @@ Java Edition Beta 1.4's release. This can be seen because the cookie's texture i
 ## Known bugs
 
 ### Patched bugs
-1. Due to lack of initialization of memory, fire can potentially burn normally inflammable blocks. See ]https://www.youtube.com/watch?v=3hrz7KK2EJs](this video) for a demo.
+1. Due to lack of initialization of memory, fire can potentially burn normally inflammable blocks. See [this video](https://www.youtube.com/watch?v=3hrz7KK2EJs) for a demo.
 2. Due to SHAPE_FIRE not being implemented, fire is invisible in this version. Fire rendering was backported from v0.7.1 and can be disabled with the ORIGINAL_CODE define
 3. Due to `GL_BLEND` being disabled, the hotbar renders as fully opaque.
 4. Memory is leaked when leaving a world with particles in it.

@@ -94,6 +94,7 @@ Inventory::Inventory(Player* pPlayer)
 	// titled "Minecraft - Pocket Edition on Xperia Play".
 	// https://www.youtube.com/watch?v=jO-y5wzmK4E
 
+#ifndef MOD_JAVA_STARTING_BLOCKS
 	m_hotbar[0]  = Tile::wood->m_ID;
 	m_hotbar[1]  = Tile::cloth_10->m_ID;
 	m_hotbar[2]  = Tile::cloth_20->m_ID;
@@ -102,6 +103,19 @@ Inventory::Inventory(Player* pPlayer)
 	m_hotbar[5]  = Tile::cloth_50->m_ID;
 	m_hotbar[6]  = Tile::cloth_60->m_ID;
 	m_hotbar[7]  = Tile::ladder->m_ID;
+#else
+	m_hotbar[0] = Tile::rock->m_ID;
+	m_hotbar[1] = Tile::stoneBrick->m_ID;
+	m_hotbar[2] = Tile::redBrick->m_ID;
+	m_hotbar[3] = Tile::dirt->m_ID;
+	m_hotbar[4] = Tile::wood->m_ID;
+	m_hotbar[5] = Tile::treeTrunk->m_ID;
+	m_hotbar[6] = Tile::leaves->m_ID;
+	m_hotbar[7] = Tile::torch->m_ID;
+#ifdef ENH_ENABLE_9TH_SLOT
+	m_hotbar[8] = Tile::stoneSlabHalf->m_ID;
+#endif
+#endif
 
 	// slot 8 missing. I assume that's the "..." button
 
@@ -154,6 +168,7 @@ Inventory::Inventory(Player* pPlayer)
 	m_items[39] = Tile::gravel->m_ID;
 	m_items[40] = Tile::water->m_ID;
 	m_items[41] = Tile::spawner->m_ID;
+	m_items[42] = Tile::lava->m_ID;
 #endif
 }
 
