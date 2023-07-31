@@ -1916,6 +1916,9 @@
     <ClInclude Include="..\platforms\windows\AppPlatform_windows.hpp">
       <Filter>Header Files\App</Filter>
     </ClInclude>
+    <ClInclude Include="..\GameMods.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\thirdparty\raknet\CMakeLists.txt">
