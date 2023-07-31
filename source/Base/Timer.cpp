@@ -9,10 +9,24 @@
 #include "Timer.hpp"
 #include "Utils.hpp"
 
+float getAccurateTimeMs()
+{
+	LARGE_INTEGER frequency;
+	QueryPerformanceFrequency(&frequency);
+
+	LARGE_INTEGER currentCounter;
+	QueryPerformanceCounter(&currentCounter);
+
+	float ms = float(((double)currentCounter.QuadPart / (double)frequency.QuadPart) * 1000);
+	return ms;
+}
+
 void Timer::advanceTime()
 {
-	int timeMs = getTimeMs();
-	if (timeMs - field_4 <= 1000)
+	float oneSecond = 1000;
+	float timeMs = getAccurateTimeMs();
+
+	if (timeMs - field_4 <= oneSecond)
 	{
 		if (timeMs - field_4 < 0)
 		{
@@ -21,13 +35,13 @@ void Timer::advanceTime()
 	}
 	else
 	{
-		int diff1 = timeMs - field_4;
-		int diff2 = timeMs - field_8;
-		field_C += ((float(diff1) / float(diff2)) - field_C) * 0.2f;
+		float diff1 = timeMs - field_4;
+		float diff2 = timeMs - field_8;
+		field_C += ((diff1 / diff2) - field_C) * 0.2f;
 	}
 
-	float diff = float(timeMs) / 1000.0f - field_0;
-	field_0 = float(timeMs) / 1000.0f;
+	float diff = timeMs / oneSecond - field_0;
+	field_0 = timeMs / oneSecond;
 
 	float x1 = diff * field_C;
 	if (x1 > 1) x1 = 1;
@@ -43,5 +57,5 @@ void Timer::advanceTime()
 
 Timer::Timer()
 {
-	field_4 = field_8 = getTimeMs();
+	field_4 = field_8 = getAccurateTimeMs();
 }
