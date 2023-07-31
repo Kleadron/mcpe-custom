@@ -1031,11 +1031,11 @@ void LevelRenderer::takePicture(TripodCamera* pCamera, Entity* pOwner)
 	static char str[256];
 	// @HUH: This has the potential to overwrite a file
 #ifdef ORIGINAL_CODE
-	sprintf(str, "%s/games/com.mojang/img_%.4d.jpg", m_pMinecraft->field_D58.c_str(), getTimeMs());
+	sprintf(str, "%s/games/com.mojang/img_%.4d.jpg", m_pMinecraft->m_externalStorageDir.c_str(), getTimeMs());
 #else
 	FILETIME filetime;
 	GetSystemTimeAsFileTime(&filetime);
-	sprintf(str, "runtime_screenshots/img_%i_%i.png", filetime.dwHighDateTime, filetime.dwLowDateTime);
+	sprintf(str, "img_%i_%i.png", filetime.dwHighDateTime, filetime.dwLowDateTime);
 #endif
 
 	m_pMinecraft->platform()->saveScreenshot(std::string(str), Minecraft::width, Minecraft::height);

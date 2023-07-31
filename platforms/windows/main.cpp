@@ -138,6 +138,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 
 			break;
 		}
+#ifdef ENH_ALLOW_SCROLL_WHEEL
+		case WM_MOUSEWHEEL:
+			Mouse::feed(3, GET_WHEEL_DELTA_WPARAM(wParam), g_MousePosX, g_MousePosY);
+
+			break;
+#endif
 		case WM_SIZE:
 		{
 			UINT width = LOWORD(lParam);
@@ -237,7 +243,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLin
 
 	g_pApp = new NinecraftApp;
 	g_pApp->m_pPlatform = &g_AppPlatform;
-	g_pApp->field_D58 = ".";
+	g_pApp->m_externalStorageDir = ".";
 
 	// initialize the app
 	g_pApp->init();
