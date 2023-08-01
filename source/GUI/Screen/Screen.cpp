@@ -67,7 +67,9 @@ void Screen::keyPressed(int key)
 {
 	if (key == '\x1B')//escape
 	{
-		m_pMinecraft->setScreen(nullptr);
+		// make sure the player is actually loaded before killing the screen
+		if (m_pMinecraft->m_pLocalPlayer != nullptr)
+			m_pMinecraft->setScreen(nullptr);
 	}
 
 	if (m_buttonTabList.size())
