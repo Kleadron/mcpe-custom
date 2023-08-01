@@ -9,26 +9,43 @@
 #include "Timer.hpp"
 #include "Utils.hpp"
 
-LARGE_INTEGER baseCounter;
+#if !defined(_WIN32) && defined(USE_ACCURATE_TIMER)
+#error "Implement getAccurateTimeMs() for your platform!"
+#endif
 
-float getAccurateTimeMs()
+#if defined(_WIN32) && defined(USE_ACCURATE_TIMER)
+static LARGE_INTEGER s_StartTime;
+static bool s_Initted;
+
+double getAccurateTimeMs()
 {
+	// Thanks to @Kleadron for helping out with this!
+	if (!s_Initted)
+	{
+		s_Initted = true;
+		QueryPerformanceCounter(&s_StartTime);
+	}
+
 	LARGE_INTEGER frequency;
 	QueryPerformanceFrequency(&frequency);
 
 	LARGE_INTEGER currentCounter;
 	QueryPerformanceCounter(&currentCounter);
 
-	float ms = float(((double)(currentCounter.QuadPart - baseCounter.QuadPart) / (double)frequency.QuadPart) * 1000);
-	return ms;
+	LONGLONG diff = currentCounter.QuadPart - s_StartTime.QuadPart;
+
+	return double(diff) / double(frequency.QuadPart) * 1000.0;
 }
+#endif
 
 void Timer::advanceTime()
 {
-	float oneSecond = 1000;
-	float timeMs = getAccurateTimeMs();
-
-	if (timeMs - field_4 <= oneSecond)
+#ifdef USE_ACCURATE_TIMER
+	double timeMs = getAccurateTimeMs();
+#else
+	int timeMs = getTimeMs();
+#endif
+	if (timeMs - field_4 <= 1000)
 	{
 		if (timeMs - field_4 < 0)
 		{
@@ -37,13 +54,18 @@ void Timer::advanceTime()
 	}
 	else
 	{
-		float diff1 = timeMs - field_4;
-		float diff2 = timeMs - field_8;
-		field_C += ((diff1 / diff2) - field_C) * 0.2f;
+#ifdef USE_ACCURATE_TIMER
+		double diff1 = timeMs - field_4;
+		double diff2 = timeMs - field_8;
+#else
+		int diff1 = timeMs - field_4;
+		int diff2 = timeMs - field_8;
+#endif
+		field_C += ((float(diff1) / float(diff2)) - field_C) * 0.2f;
 	}
 
-	float diff = timeMs / oneSecond - field_0;
-	field_0 = timeMs / oneSecond;
+	float diff = float(timeMs) / 1000.0f - field_0;
+	field_0 = float(timeMs) / 1000.0f;
 
 	float x1 = diff * field_C;
 	if (x1 > 1) x1 = 1;
@@ -59,6 +81,5 @@ void Timer::advanceTime()
 
 Timer::Timer()
 {
-	QueryPerformanceCounter(&baseCounter);
-	field_4 = field_8 = getAccurateTimeMs();
+	field_4 = field_8 = getTimeMs();
 }

@@ -433,7 +433,13 @@ void GameRenderer::renderLevel(float f)
 		setupFog(0);
 
 		glEnable(GL_BLEND);
+		#ifndef ORIGINAL_CODE
 		//glDisable(GL_CULL_FACE);
+		#else
+		glDisable(GL_CULL_FACE);
+		#endif
+		
+		// glDepthMask(false); -- added in 0.1.1j. Introduces more issues than fixes
 
 		// render the alpha layer
 		m_pMinecraft->m_pTextures->loadAndBindTexture(C_TERRAIN_NAME);
@@ -441,7 +447,11 @@ void GameRenderer::renderLevel(float f)
 
 		glDepthMask(true);
 		
+		#ifndef ORIGINAL_CODE
 		//glEnable(GL_CULL_FACE);
+		#else
+		glEnable(GL_CULL_FACE);
+		#endif
 		glDisable(GL_BLEND);
 
 		if (field_44 == 1.0f && pMob->isPlayer() && m_pMinecraft->m_hitResult.m_hitType != HitResult::NONE && !pMob->isUnderLiquid(Material::water))
