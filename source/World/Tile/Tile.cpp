@@ -298,12 +298,6 @@ void Tile::initTiles()
 		->setSoundType(Tile::SOUND_GRAVEL)
 		->setDescriptionId("clay");
 
-	Tile::spawner = (new SpawnerTile(TILE_SPAWNER, TEXTURE_SPAWNER, Material::stone))
-		->init()
-		->setDestroyTime(0.6f)
-		->setSoundType(Tile::SOUND_STONE)
-		->setDescriptionId("spawner");
-
 	Tile::farmland = (new FarmTile(TILE_FARMLAND, Material::dirt))
 		->init()
 		->setDestroyTime(0.6f)
@@ -611,6 +605,12 @@ void Tile::initTiles()
 		->setDestroyTime(0.8f)
 		->setSoundType(Tile::SOUND_CLOTH)
 		->setDescriptionId("cloth");
+
+	Tile::spawner = (new SpawnerTile(TILE_SPAWNER, TEXTURE_SPAWNER, Material::stone))
+		->init()
+		->setDestroyTime(0.6f)
+		->setSoundType(Tile::SOUND_STONE)
+		->setDescriptionId("spawner");
 
 	for (int i = 0; i < C_MAX_TILES; i++)
 	{
@@ -1170,7 +1170,6 @@ Tile
 	*Tile::grass,
 	*Tile::ice,
 	*Tile::clay,
-	*Tile::spawner,
 	*Tile::farmland,
 	*Tile::stoneSlab,
 	*Tile::stoneSlabHalf,
@@ -1219,4 +1218,6 @@ Tile
 	*Tile::stairs_wood,
 	*Tile::stairs_stone,
 	*Tile::door_wood,
-	*Tile::door_iron;
+	*Tile::door_iron,
+	// CUSTOM TILES
+	*Tile::spawner;

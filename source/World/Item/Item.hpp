@@ -179,7 +179,6 @@ public: // Static declarations
 		*brick,
 		*clay,
 		*reeds,
-		*spawner,
 		*paper,
 		*book,
 		*slimeBall,
@@ -200,7 +199,9 @@ public: // Static declarations
 		*diode,
 		*record_01,
 		*record_02,
-		*camera;
+		*camera,
+		// CUSTOM ITEMS
+		*spawner;
 };
 
 class TileItem : public Item

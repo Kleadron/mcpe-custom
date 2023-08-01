@@ -184,7 +184,6 @@ public: // static variables
 		* coalOre,
 		* lapisOre,
 		* reeds,
-		* spawner,
 		* ladder,
 		* obsidian,
 		* tnt,
@@ -199,7 +198,9 @@ public: // static variables
 		* stairs_wood,
 		* stairs_stone,
 		* door_wood,
-		* door_iron;
+		* door_iron,
+		// CUSTOM TILES
+		* spawner;
 
 public:
 	int m_TextureFrame = 1;
