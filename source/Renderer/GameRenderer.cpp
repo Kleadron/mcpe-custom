@@ -435,6 +435,8 @@ void GameRenderer::renderLevel(float f)
 		glEnable(GL_BLEND);
 		#ifndef ORIGINAL_CODE
 		//glDisable(GL_CULL_FACE);
+		if (m_pMinecraft->m_options.field_18)
+			glShadeModel(GL_SMOOTH);
 		#else
 		glDisable(GL_CULL_FACE);
 		#endif
@@ -449,6 +451,7 @@ void GameRenderer::renderLevel(float f)
 		
 		#ifndef ORIGINAL_CODE
 		//glEnable(GL_CULL_FACE);
+		glShadeModel(GL_FLAT);
 		#else
 		glEnable(GL_CULL_FACE);
 		#endif
