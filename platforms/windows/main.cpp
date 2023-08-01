@@ -8,8 +8,9 @@
 #define WIN32_LEAN_AND_MEAN
 
 #include <cstdarg>
+#include <windows.h>
 #include <WindowsX.h>
-#include <dwmapi.h>
+//#include <dwmapi.h>
 #include <VersionHelpers.h>
 
 #include "compat/GL.hpp"
@@ -21,6 +22,41 @@
 
 LPCTSTR g_GameTitle = TEXT("MINECRAFT");
 LPCTSTR g_WindowClassName = TEXT("MinecraftClass");
+
+BOOL wantVSync = TRUE;
+
+// windows dwm sync functions
+// On windows versions with the DWM compositor enabled, regular opengl vsync isn't accurate to the compositor's display time.
+// Waiting until DWM has flushed to display a frame results in a smoother experience.
+// If you don't want this, or it causes problems, you can comment out this line.
+// The project does not need to be linked against dwmapi.lib and will find the functions if the DLL exists.
+#define USE_DWM_SYNC
+
+#ifdef USE_DWM_SYNC
+BOOL hasDWM;
+typedef HRESULT(WINAPI *DWMFUNC1)(BOOL *pfEnabled);
+typedef HRESULT(WINAPI *DWMFUNC2)();
+DWMFUNC1 p_DwmIsCompositionEnabled;
+DWMFUNC2 p_DwmFlush;
+
+void linkDWM()
+{
+	HMODULE dwmapiLib = LoadLibrary("dwmapi.dll");
+
+	if (dwmapiLib != NULL)
+	{
+		printf("Found dwmapi.dll, vsync will sync to compositor.");
+		p_DwmIsCompositionEnabled = (DWMFUNC1)GetProcAddress(dwmapiLib, "DwmIsCompositionEnabled");
+		p_DwmFlush = (DWMFUNC2)GetProcAddress(dwmapiLib, "DwmFlush");
+		hasDWM = true;
+	}
+	else
+	{
+		printf("No dwmapi.dll, vsync will sync to monitor.");
+		hasDWM = false;
+	}
+}
+#endif
 
 void LogMsg(const char* fmt, ...)
 {
@@ -183,9 +219,23 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow)
 {
+	Random random;
+	random.setSeed(123456);
+
+	for (int i = 0; i < 256; i++)
+	{
+		LogMsg("%d: %d", i, random.nextInt(256 - i) + i);
+	}
+
+
+
 	SetInstance(hInstance);
 
 	g_AppPlatform.initConsts();
+
+#ifdef USE_DWM_SYNC
+	linkDWM();
+#endif
 
 	// register the window class:
 	WNDCLASS wc;
@@ -217,7 +267,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLin
 	ShowWindow(hWnd, nCmdShow);
 	SetHWND(hWnd);
 
-	BOOL wantVSync = TRUE;
 	int glVSync = 0;
 
 	HDC hDC; HGLRC hRC;
@@ -260,17 +309,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLin
 
 			if (wantVSync)
 			{
-				if (!IsWindows8OrGreater() && IsWindowsVistaOrGreater())
+				// todo: check if DWM sync is appropriate for versions over 7/vista
+#ifdef USE_DWM_SYNC
+				if (hasDWM && !IsWindows8OrGreater() && IsWindowsVistaOrGreater())
 				{
 					BOOL enabled = FALSE;
 
-					if (SUCCEEDED(DwmIsCompositionEnabled(&enabled)) && enabled)
+					if (SUCCEEDED(p_DwmIsCompositionEnabled(&enabled)) && enabled)
 					{
 						xglSwapIntervalEXT(0);
-						DwmFlush();
+						p_DwmFlush();
 					}
 				}
 				else
+#endif
 				{
 					xglSwapIntervalEXT(1);
 				}
