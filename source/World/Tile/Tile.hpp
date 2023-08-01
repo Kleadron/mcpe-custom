@@ -331,7 +331,7 @@ public:
 };
 
 #ifdef MOD_EXTRA_BLOCKS
-class CactusTile : public Tile
+class CactusTile : public HalfTransparentTile
 {
 public:
 	CactusTile(int ID, Material*);

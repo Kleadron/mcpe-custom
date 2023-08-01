@@ -18,8 +18,13 @@ int IngameBlockSelectionScreen::getSelectedSlot(int x, int y)
 	int bottom = m_height - 151;
 	int left = m_width / 2 - 87;
 
+#ifdef MOD_EXTRA_BLOCKS
+	if (y < bottom)
+		y -= 16;
+#else
 	if (y < bottom)
 		return -1;
+#endif
 	if (x < left)
 		return -1;
 
