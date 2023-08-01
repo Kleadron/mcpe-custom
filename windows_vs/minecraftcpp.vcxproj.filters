@@ -1052,7 +1052,7 @@
     </ClCompile>
     <ClCompile Include="..\source\World\Tile\SpawnerTile.cpp">
       <Filter>Source Files\World\Tile</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\platforms\windows\AppPlatform_windows.cpp">
       <Filter>Source Files\App</Filter>
     </ClCompile>
@@ -1923,6 +1923,9 @@
       <Filter>Header Files\App</Filter>
     </ClInclude>
     <ClInclude Include="..\GameMods.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platforms\windows\SoundSystem_windows.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
