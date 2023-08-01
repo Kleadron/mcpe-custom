@@ -1062,6 +1062,12 @@
     <ClCompile Include="..\platforms\windows\SoundSystem_windows.cpp">
       <Filter>Source Files\App</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\World\Tile\CactusTile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\World\Tile\SoulSandTile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\Options.hpp">
