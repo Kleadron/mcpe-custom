@@ -203,9 +203,14 @@ public: // static variables
 #else
 		* door_iron,
 		// CUSTOM TILES
+		* sapling,     // ID: 6
+		* sponge,      // ID: 19
 		* lapisBlock,  // ID: 22
+		* cobweb,      // ID: 30
 		* mossStone,   // ID: 48
 		* spawner,     // ID: 52
+		* snow,        // ID: 80
+		* cactus,      // ID: 81
 		* netherrack,  // ID: 87
 		* soulSand,    // ID: 88
 		* glowStone;   // ID: 89
@@ -325,6 +330,17 @@ public:
 	int getResourceCount(Random*) override;
 };
 
+#ifdef MOD_EXTRA_BLOCKS
+class CactusTile : public Tile
+{
+public:
+	CactusTile(int ID, Material*);
+
+	int getResource(int, Random*) override;
+	int getTexture(LevelSource*, int x, int y, int z, int dir) override;
+	//void tick(Level*, int x, int y, int z, Random*) override;
+};
+
 class SpawnerTile : public HalfTransparentTile
 {
 public:
@@ -333,6 +349,19 @@ public:
 	int getResource(int, Random*) override;
 	int getResourceCount(Random*) override;
 };
+
+class SoulSandTile : public Tile
+{
+public:
+	SoulSandTile(int ID, Material*);
+
+	AABB* getAABB(Level*, int x, int y, int z) override;
+	int getResource(int, Random*) override;
+	int getTexture(int dir, int data) override;
+	bool isCubeShaped() override;
+	bool isSolidRender() override;
+};
+#endif
 
 class FarmTile : public Tile
 {
@@ -556,6 +585,18 @@ public:
 
 		return float(data + 1) / 9.0f;
 	}
+
+#ifdef MOD_EXTRA_BLOCKS
+	class CactusTile : public Tile
+	{
+	public:
+		CactusTile(int ID, Material*);
+
+		int getResource(int, Random*) override;
+		int getTexture(LevelSource*, int x, int y, int z, int dir) override;
+		//void tick(Level*, int x, int y, int z, Random*) override;
+	};
+#endif
 
 public:
 	int field_6C = 0;

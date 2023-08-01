@@ -606,13 +606,35 @@ void Tile::initTiles()
 		->setSoundType(Tile::SOUND_CLOTH)
 		->setDescriptionId("cloth");
 
+	// Custom Tiles
 #ifdef MOD_EXTRA_BLOCKS
+	Tile::sapling = (new Bush(TILE_SAPLING, TEXTURE_SAPLING)) // ID: 6
+		->init()
+		->setDestroyTime(0.0f)
+		->setExplodeable(0.0f)
+		->setSoundType(Tile::SOUND_GRASS)
+		->setDescriptionId("sapling");
+
+	Tile::sponge = (new DirtTile(TILE_SPONGE, TEXTURE_SPONGE, Material::dirt)) // ID:19
+		->init()
+		->setDestroyTime(0.6f)
+		->setExplodeable(0.6f)
+		->setSoundType(Tile::SOUND_GRASS)
+		->setDescriptionId("sponge");
+
 	Tile::lapisBlock = (new OreTile(TILE_LAPIS_BLOCK, TEXTURE_LAPIS_BLOCK)) // ID: 22
 		->init()
 		->setDestroyTime(3.0f)
 		->setExplodeable(5.0f)
 		->setSoundType(Tile::SOUND_STONE)
 		->setDescriptionId("blockLapis");
+
+	Tile::cobweb = (new Bush(TILE_COBWEB, TEXTURE_COBWEB))
+		->init()
+		->setDestroyTime(4.0f)
+		->setExplodeable(4.0f)
+		->setSoundType(Tile::SOUND_STONE)
+		->setDescriptionId("cobweb");
 
 	Tile::mossStone = (new Tile(TILE_MOSSY_STONE, TEXTURE_MOSSY_STONE, Material::stone)) // ID: 48
 		->init()
@@ -627,6 +649,20 @@ void Tile::initTiles()
 		->setSoundType(Tile::SOUND_STONE)
 		->setDescriptionId("spawner");
 
+	Tile::snow = (new Tile(TILE_SNOW, TEXTURE_SNOW, Material::snow)) // ID: 80
+		->init()
+		->setDestroyTime(0.2f)
+		->setExplodeable(0.2f)
+		->setSoundType(Tile::SOUND_CLOTH)
+		->setDescriptionId("snow");
+
+	Tile::cactus = (new CactusTile(TILE_CACTUS, Material::snow)) // ID: 80
+		->init()
+		->setDestroyTime(0.4f)
+		->setExplodeable(0.4f)
+		->setSoundType(Tile::SOUND_CLOTH)
+		->setDescriptionId("cactus");
+
 	Tile::netherrack = (new Tile(TILE_NETHERRACK, TEXTURE_BLOODSTONE, Material::stone)) // ID: 87
 		->init()
 		->setDestroyTime(0.4f)
@@ -634,14 +670,14 @@ void Tile::initTiles()
 		->setSoundType(Tile::SOUND_STONE)
 		->setDescriptionId("netherrack");
 
-	Tile::soulSand = (new SandTile(TILE_SOULSAND, TEXTURE_SOULSAND, Material::sand)) // ID: 88
+	Tile::soulSand = (new SoulSandTile(TILE_SOULSAND, Material::sand)) // ID: 88
 		->init()
 		->setDestroyTime(0.5f)
 		->setExplodeable(0.5f)
 		->setSoundType(Tile::SOUND_SAND)
 		->setDescriptionId("soulSand");
 
-	Tile::glowStone = (new GlassTile(TILE_GLOWSTONE, TEXTURE_GLOWSTONE, Material::glass)) // ID:89
+	Tile::glowStone = (new GlassTile(TILE_GLOWSTONE, TEXTURE_GLOWSTONE, Material::glass)) // ID: 89
 		->init()
 		->setDestroyTime(0.3f)
 		->setExplodeable(0.3f)
@@ -1260,9 +1296,14 @@ Tile
 #else
 	* Tile::door_iron,
 	// CUSTOM TILES
+	*Tile::sapling,     // ID: 6
+	*Tile::sponge,      // ID: 19
 	*Tile::lapisBlock,  // ID: 22
+	*Tile::cobweb,      // ID: 30
 	*Tile::mossStone,   // ID: 48
 	*Tile::spawner,     // ID: 52
+	*Tile::snow,        // ID: 80
+	*Tile::cactus,      // ID: 81
 	*Tile::netherrack,  // ID: 87
 	*Tile::soulSand,    // ID: 88
 	*Tile::glowStone;   // ID: 89

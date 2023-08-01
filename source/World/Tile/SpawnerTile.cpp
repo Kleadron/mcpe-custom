@@ -9,6 +9,7 @@
 #include "Tile.hpp"
 #include "Level.hpp"
 
+#ifdef MOD_EXTRA_BLOCKS
 SpawnerTile::SpawnerTile(int a, int b, Material* c) : HalfTransparentTile(a, b, c)
 {
 }
@@ -22,3 +23,4 @@ int SpawnerTile::getResourceCount(Random* random)
 {
 	return 4;
 }
+#endif
