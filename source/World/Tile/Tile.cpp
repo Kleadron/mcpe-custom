@@ -606,11 +606,48 @@ void Tile::initTiles()
 		->setSoundType(Tile::SOUND_CLOTH)
 		->setDescriptionId("cloth");
 
-	Tile::spawner = (new SpawnerTile(TILE_SPAWNER, TEXTURE_SPAWNER, Material::stone))
+#ifdef MOD_EXTRA_BLOCKS
+	Tile::lapisBlock = (new OreTile(TILE_LAPIS_BLOCK, TEXTURE_LAPIS_BLOCK)) // ID: 22
+		->init()
+		->setDestroyTime(3.0f)
+		->setExplodeable(5.0f)
+		->setSoundType(Tile::SOUND_STONE)
+		->setDescriptionId("blockLapis");
+
+	Tile::mossStone = (new Tile(TILE_MOSSY_STONE, TEXTURE_MOSSY_STONE, Material::stone)) // ID: 48
+		->init()
+		->setDestroyTime(2.0f)
+		->setExplodeable(10.0f)
+		->setSoundType(Tile::SOUND_STONE)
+		->setDescriptionId("mossStone");
+
+	Tile::spawner = (new SpawnerTile(TILE_SPAWNER, TEXTURE_SPAWNER, Material::stone)) // ID: 52
 		->init()
 		->setDestroyTime(0.6f)
 		->setSoundType(Tile::SOUND_STONE)
 		->setDescriptionId("spawner");
+
+	Tile::netherrack = (new Tile(TILE_NETHERRACK, TEXTURE_BLOODSTONE, Material::stone)) // ID: 87
+		->init()
+		->setDestroyTime(0.4f)
+		->setExplodeable(0.4f)
+		->setSoundType(Tile::SOUND_STONE)
+		->setDescriptionId("netherrack");
+
+	Tile::soulSand = (new SandTile(TILE_SOULSAND, TEXTURE_SOULSAND, Material::sand)) // ID: 88
+		->init()
+		->setDestroyTime(0.5f)
+		->setExplodeable(0.5f)
+		->setSoundType(Tile::SOUND_SAND)
+		->setDescriptionId("soulSand");
+
+	Tile::glowStone = (new GlassTile(TILE_GLOWSTONE, TEXTURE_GLOWSTONE, Material::glass)) // ID:89
+		->init()
+		->setDestroyTime(0.3f)
+		->setExplodeable(0.3f)
+		->setSoundType(Tile::SOUND_GLASS)
+		->setDescriptionId("glowStone");
+#endif
 
 	for (int i = 0; i < C_MAX_TILES; i++)
 	{
@@ -1218,6 +1255,15 @@ Tile
 	*Tile::stairs_wood,
 	*Tile::stairs_stone,
 	*Tile::door_wood,
-	*Tile::door_iron,
+#ifndef MOD_EXTRA_BLOCKS
+	*Tile::door_iron;
+#else
+	* Tile::door_iron,
 	// CUSTOM TILES
-	*Tile::spawner;
+	*Tile::lapisBlock,  // ID: 22
+	*Tile::mossStone,   // ID: 48
+	*Tile::spawner,     // ID: 52
+	*Tile::netherrack,  // ID: 87
+	*Tile::soulSand,    // ID: 88
+	*Tile::glowStone;   // ID: 89
+#endif

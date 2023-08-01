@@ -6,8 +6,10 @@ class Player; // in case we're included from Player.hpp
 
 #define C_MAX_HOTBAR_ITEMS (9)
 
-#ifdef ENH_EXTRA_ITEMS_IN_INV
-#define C_MAX_INVENTORY_ITEMS (36+9)
+#ifdef MOD_EXTRA_BLOCKS
+#define C_MAX_INVENTORY_ITEMS (36+54)
+//#elif ENH_EXTRA_ITEMS_IN_INV
+//#define C_MAX_INVENTORY_ITEMS (36+9)
 #else
 #define C_MAX_INVENTORY_ITEMS (36)
 #endif

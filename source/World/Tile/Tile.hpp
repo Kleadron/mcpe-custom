@@ -198,9 +198,18 @@ public: // static variables
 		* stairs_wood,
 		* stairs_stone,
 		* door_wood,
+#ifndef MOD_EXTRA_BLOCKS
+		* door_iron;
+#else
 		* door_iron,
 		// CUSTOM TILES
-		* spawner;
+		* lapisBlock,  // ID: 22
+		* mossStone,   // ID: 48
+		* spawner,     // ID: 52
+		* netherrack,  // ID: 87
+		* soulSand,    // ID: 88
+		* glowStone;   // ID: 89
+#endif
 
 public:
 	int m_TextureFrame = 1;

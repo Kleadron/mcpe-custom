@@ -99,6 +99,9 @@ enum eTileID
 
 	TILE_GLASS = 20,
 	TILE_ORE_LAPIS,
+#ifdef MOD_EXTRA_BLOCKS
+	TILE_LAPIS_BLOCK,
+#endif
 
 	TILE_SANDSTONE = 24,
 
@@ -116,11 +119,17 @@ enum eTileID
 	TILE_BRICKS,
 	TILE_TNT,
 
+#ifdef MOD_EXTRA_BLOCKS
+	TILE_MOSSY_STONE = 48, // remove 48 when bookshelf is added
+#endif
+
 	TILE_OBSIDIAN = 49,
 	TILE_TORCH, // 50
 	TILE_FIRE, // 51
 
+#ifdef MOD_EXTRA_BLOCKS
 	TILE_SPAWNER = 52, // Matched with bedrock edition ID
+#endif
 
 	TILE_STAIRS_WOOD = 53,
 
@@ -144,6 +153,12 @@ enum eTileID
 
 	TILE_CLAY = 82,
 	TILE_REEDS,
+
+#ifdef MOD_EXTRA_BLOCKS
+	TILE_NETHERRACK = 87,
+	TILE_SOULSAND,
+	TILE_GLOWSTONE,
+#endif
 
 	TILE_INVISIBLE = 95,
 
@@ -401,6 +416,9 @@ enum // Textures
 	TEXTURE_NONE126,
 	TEXTURE_NONE127,
 
+#ifdef MOD_EXTRA_BLOCKS
+	TEXTURE_LAPIS_BLOCK = 144,
+#endif
 	TEXTURE_ORE_LAPIS = 160,
 
 	TEXTURE_SANDSTONE_TOP = 176,

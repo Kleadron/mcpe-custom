@@ -116,9 +116,9 @@ Inventory::Inventory(Player* pPlayer)
 	m_hotbar[8] = Tile::stoneSlabHalf->m_ID;
 #endif
 #endif
-
 	// slot 8 missing. I assume that's the "..." button
 
+#ifndef MOD_EXTRA_BLOCKS
 	m_items[0] = Tile::rock->m_ID;
 	m_items[1] = Tile::stoneBrick->m_ID;
 	m_items[2] = Tile::sandStone->m_ID;
@@ -167,8 +167,104 @@ Inventory::Inventory(Player* pPlayer)
 	m_items[38] = Item::door_wood->m_itemID;
 	m_items[39] = Tile::gravel->m_ID;
 	m_items[40] = Tile::water->m_ID;
-	m_items[41] = Tile::spawner->m_ID;
-	m_items[42] = Tile::lava->m_ID;
+	m_items[41] = Tile::lava->m_ID;
+	m_items[42] = Tile::grass->m_ID;
+#endif
+#else
+	m_items[0] = Tile::stoneBrick->m_ID;
+	m_items[1] = Tile::rock->m_ID;
+	m_items[2] = Tile::emeraldOre->m_ID;
+	m_items[3] = Tile::goldOre->m_ID;
+	m_items[4] = Tile::ironOre->m_ID;
+	m_items[5] = Tile::coalOre->m_ID;
+	m_items[6] = Tile::lapisOre->m_ID;
+	m_items[7] = Tile::redStoneOre->m_ID;
+	m_items[8] = Tile::clay->m_ID;
+	m_items[9] = Tile::emeraldBlock->m_ID;
+	m_items[10] = Tile::goldBlock->m_ID;
+	m_items[11] = Tile::ironBlock->m_ID;
+	m_items[12] = Tile::unbreakable->m_ID;
+	m_items[13] = Tile::lapisBlock->m_ID;
+	m_items[14] = Tile::redBrick->m_ID;
+	m_items[15] = Tile::mossStone->m_ID;
+	m_items[16] = Tile::stoneSlabHalf->m_ID;
+	m_items[17] = Tile::obsidian->m_ID;
+	m_items[18] = Tile::netherrack->m_ID;
+	m_items[19] = Tile::glowStone->m_ID;
+	m_items[20] = Tile::soulSand->m_ID;
+	m_items[21] = Tile::treeTrunk->m_ID;
+
+	m_items[22] = Tile::treeTrunk->m_ID; //spruce
+	m_items[23] = Tile::treeTrunk->m_ID; //birch
+
+	m_items[24] = Tile::leaves->m_ID;
+	m_items[25] = Tile::dirt->m_ID;
+	m_items[26] = Tile::grass->m_ID;
+	m_items[27] = Tile::sand->m_ID;
+	m_items[28] = Tile::sandStone->m_ID;
+	m_items[29] = Tile::gravel->m_ID;
+	m_items[30] = Tile::rock->m_ID; //cobweb
+	m_items[31] = Tile::wood->m_ID;
+	m_items[32] = Tile::rock->m_ID; //sapling
+	m_items[33] = Tile::rock->m_ID; //sponge
+	m_items[34] = Tile::ice->m_ID;
+	m_items[35] = Tile::rock->m_ID; // snow
+	m_items[36] = Tile::flower->m_ID;
+	m_items[37] = Tile::rose->m_ID;
+	m_items[38] = Tile::mushroom1->m_ID;
+	m_items[39] = Tile::mushroom2->m_ID;
+	m_items[40] = Tile::reeds->m_ID;
+	m_items[41] = Tile::rock->m_ID; // cactus
+	m_items[42] = Tile::rock->m_ID; //pumpkin
+	m_items[43] = Tile::rock->m_ID; //jack o lanturn
+	m_items[44] = Tile::rock->m_ID; //chest
+	m_items[45] = Tile::rock->m_ID; //crafting table
+	m_items[46] = Tile::glass->m_ID;
+	m_items[47] = Tile::tnt->m_ID;
+	m_items[48] = Tile::rock->m_ID; //bookshelf
+	m_items[49] = Tile::rock->m_ID; //white wool
+	m_items[50] = Tile::rock->m_ID; //orange wool
+	m_items[51] = Tile::rock->m_ID; //magenta wool
+
+	m_items[52] = Tile::cloth_41->m_ID; // Light Blue Wool
+	m_items[53] = Tile::cloth_31->m_ID; // Yellow Wool
+	m_items[54] = Tile::cloth_21->m_ID; // Lime Wool
+	m_items[55] = Tile::cloth_11->m_ID; // Pink Wool
+	m_items[56] = Tile::cloth_01->m_ID; // Grey Wool
+	m_items[57] = Tile::cloth_70->m_ID; // Light Grey Wool
+	m_items[58] = Tile::cloth_60->m_ID; // Cyan Wool
+	m_items[59] = Tile::cloth_50->m_ID; // Purple Wool
+	m_items[60] = Tile::cloth_40->m_ID; // Blue Wool
+	m_items[61] = Tile::cloth_30->m_ID; // Brown Wool
+	m_items[62] = Tile::cloth_20->m_ID; // Green Wool
+	m_items[63] = Tile::cloth_10->m_ID; // Red Wool
+	m_items[64] = Tile::rock->m_ID; //black wool
+
+	m_items[65] = Tile::rock->m_ID; //dispenser
+	m_items[66] = Tile::rock->m_ID; //furnace
+	m_items[67] = Tile::rock->m_ID; //note block
+	m_items[68] = Tile::rock->m_ID; //jukebox
+	m_items[69] = Tile::ladder->m_ID;
+	m_items[70] = Tile::rock->m_ID; //rail
+	m_items[71] = Tile::torch->m_ID; 
+	m_items[72] = Tile::stairs_wood->m_ID;
+	m_items[73] = Tile::stairs_stone->m_ID;
+	m_items[74] = Tile::rock->m_ID; //lever
+	m_items[75] = Tile::rock->m_ID; //redstone torch
+	m_items[76] = Tile::rock->m_ID; //cake
+	m_items[77] = Item::door_wood->m_itemID;
+	m_items[78] = Tile::water->m_ID;
+	m_items[79] = Tile::lava->m_ID;
+	m_items[80] = Item::door_iron->m_itemID;
+	//m_items[81] = Item::redStone->m_itemID; //redstone
+	m_items[82] = Item::reeds->m_itemID; //reeds
+	//m_items[83] = Item::cake->m_itemID; //cake
+	//m_items[84] = Item::bed->m_itemID; //bed
+	m_items[85] = Item::door_iron->m_itemID; //redstone repeater
+	m_items[86] = Item::camera->m_itemID;
+	m_items[87] = Tile::spawner->m_ID;
+	m_items[88] = Tile::rock->m_ID; //lit furnace
+	m_items[89] = Tile::rock->m_ID; //double stone slab
 #endif
 }
 
