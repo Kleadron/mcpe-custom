@@ -117,8 +117,10 @@ enum eTileID
 	TILE_TNT,
 
 	TILE_OBSIDIAN = 49,
-	TILE_TORCH,
-	TILE_FIRE,
+	TILE_TORCH, // 50
+	TILE_FIRE, // 51
+
+	TILE_SPAWNER = 52, // Matched with bedrock edition ID
 
 	TILE_STAIRS_WOOD = 53,
 
@@ -142,8 +144,6 @@ enum eTileID
 
 	TILE_CLAY = 82,
 	TILE_REEDS,
-
-	TILE_SPAWNER,
 
 	TILE_INVISIBLE = 95,
 
