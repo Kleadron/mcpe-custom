@@ -432,15 +432,12 @@ void GameRenderer::renderLevel(float f)
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		setupFog(0);
 
+#ifndef ORIGINAL_CODE
+		glShadeModel(GL_SMOOTH);
+#endif
+
 		glEnable(GL_BLEND);
-		#ifndef ORIGINAL_CODE
-		//glDisable(GL_CULL_FACE);
-		if (m_pMinecraft->m_options.field_18)
-			glShadeModel(GL_SMOOTH);
-		#else
 		glDisable(GL_CULL_FACE);
-		#endif
-		
 		// glDepthMask(false); -- added in 0.1.1j. Introduces more issues than fixes
 
 		// render the alpha layer
@@ -448,13 +445,12 @@ void GameRenderer::renderLevel(float f)
 		pLR->render(pMob, 1, f);
 
 		glDepthMask(true);
-		
-		#ifndef ORIGINAL_CODE
-		//glEnable(GL_CULL_FACE);
+
+
+#ifndef ORIGINAL_CODE
 		glShadeModel(GL_FLAT);
-		#else
+#endif
 		glEnable(GL_CULL_FACE);
-		#endif
 		glDisable(GL_BLEND);
 
 		if (field_44 == 1.0f && pMob->isPlayer() && m_pMinecraft->m_hitResult.m_hitType != HitResult::NONE && !pMob->isUnderLiquid(Material::water))
@@ -543,13 +539,7 @@ void GameRenderer::render(float f)
 		field_80 = pMC->field_D24;
 #endif
 
-		// Kleadron: All of the above code is pointless if you're not using a gamepad. Mouse input should be instant.
-		// Leaving it tho incase gamepad gets added.
-#ifndef ORIGINAL_CODE
-		pMC->m_pLocalPlayer->turn(delta.x, delta.y * multPitch);
-#else
 		pMC->m_pLocalPlayer->turn(diff_field_84 * field_7C, diff_field_84 * multPitch * field_80);
-#endif
 	}
 
 	if (m_pMinecraft->isLevelGenerated())
