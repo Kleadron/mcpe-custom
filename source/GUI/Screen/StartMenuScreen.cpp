@@ -50,11 +50,11 @@ void StartMenuScreen::buttonClicked(Button* pButton)
 	{
 #if defined(DEMO) || !defined(ORIGINAL_CODE)
 
-#	ifdef DEMO
+#	ifndef DEMO
 #		define DEMO_SEED int(getEpochTimeS())
 #	else
 		// 1942892620 = long(12345678901324)
-#		define DEMO_SEED 123456
+#		define DEMO_SEED 1690968639 // 123456
 #	endif
 
 		m_pMinecraft->selectLevel("_DemoLevel", "_DemoLevel", DEMO_SEED);
