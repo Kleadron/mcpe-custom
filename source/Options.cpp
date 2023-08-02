@@ -89,7 +89,6 @@ void Options::initDefaultValues()
 	m_keyBinds[2].value = AKEYCODE_DPAD_DOWN;
 	m_keyBinds[3].value = AKEYCODE_DPAD_RIGHT;
 	m_keyBinds[4].value = AKEYCODE_DPAD_CENTER; // lmao, how stupid.
-	m_keyBinds[9].value = AKEYCODE_SHIFT_LEFT;
 	m_keyBinds[10].value = AKEYCODE_BUTTON_L1;
 	m_keyBinds[11].value = AKEYCODE_BUTTON_R1;
 	m_keyBinds[12].value = AKEYCODE_DPAD_DOWN;
