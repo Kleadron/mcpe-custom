@@ -318,15 +318,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLin
 			{
 				// todo: check if DWM sync is appropriate for versions over 7/vista
 #ifdef USE_DWM_SYNC
-				if (hasDWM && IsWindowsVistaOrGreater())
-				{
-					BOOL enabled = FALSE;
+				BOOL enabled = FALSE;
 
-					if (SUCCEEDED(p_DwmIsCompositionEnabled(&enabled)) && enabled)
-					{
-						xglSwapIntervalEXT(0);
-						p_DwmFlush();
-					}
+				if (hasDWM && IsWindowsVistaOrGreater() && SUCCEEDED(p_DwmIsCompositionEnabled(&enabled)) && enabled)
+				{
+					xglSwapIntervalEXT(0);
+					p_DwmFlush();
 				}
 				else
 #endif
