@@ -1067,6 +1067,12 @@
     </ClCompile>
     <ClCompile Include="..\source\World\Tile\CactusTile.cpp">
       <Filter>Source Files\World\Tile</Filter>
+	</ClCompile>
+    <ClCompile Include="..\source\World\RegionFile.cpp">
+      <Filter>Source Files\World</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\World\Storage\ExternalFileLevelStorage.cpp">
+      <Filter>Source Files\World\Storage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1932,6 +1938,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\platforms\windows\SoundSystem_windows.hpp">
+		<Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\World\RegionFile.hpp">
+      <Filter>Header Files\World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\World\Storage\ExternalFileLevelStorage.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
