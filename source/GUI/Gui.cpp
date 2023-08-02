@@ -401,6 +401,7 @@ void Gui::handleKeyPressed(int keyCode)
 		case AKEYCODE_FLIGHT:
 		{
 			m_pMinecraft->m_options.m_bFlyCheat = !m_pMinecraft->m_options.m_bFlyCheat;
+			break;
 		}
 
 		case AKEYCODE_BUTTON_X:
