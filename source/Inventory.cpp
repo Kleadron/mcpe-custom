@@ -259,7 +259,9 @@ Inventory::Inventory(Player* pPlayer)
 	//m_items[81] = Item::redStone->m_itemID; //redstone
 	m_items[82] = Item::reeds->m_itemID; //reeds
 	//m_items[83] = Item::cake->m_itemID; //cake
+    m_items[83] = Item::sword_iron->m_itemID;
 	//m_items[84] = Item::bed->m_itemID; //bed
+	m_items[84] = Tile::fire->m_ID; //cake
 	m_items[85] = Item::door_iron->m_itemID; //redstone repeater
 	m_items[86] = Item::camera->m_itemID;
 	m_items[87] = Tile::spawner->m_ID;

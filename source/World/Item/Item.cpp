@@ -189,6 +189,12 @@ void Item::initItems()
 	Item::camera = NEW_X_ITEMN(CameraItem, ITEM_CAMERA)
 		->setIcon(2, 15)
 		->setDescriptionId("camera");
+
+	// CUSTOM MOD ITEMS
+	Item::sword_iron = NEW_ITEM(ITEM_SWORD_IRON)
+		->setIcon(2, 4)
+		->setDescriptionId("sword")
+		->handEquipped(); // weirdly also in JE
 }
 
 int Item::getIcon(ItemInstance* pInstance)
