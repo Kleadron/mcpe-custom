@@ -6,8 +6,16 @@
 	SPDX-License-Identifier: BSD-1-Clause
  ********************************************************************/
 
+#ifndef ORIGINAL_CODE
+#include "Utils.hpp"
+#endif
 #include "TileRenderer.hpp"
 #include "Minecraft.hpp"
+
+// Remove this if you rename it!
+#ifdef MOD_GRASS_SIDE_OVERLAY
+#define TEXTURE_GRASS_SIDE_OVERLAY TEXTURE_OBSIDIAN_CRYING
+#endif
 
 TileRenderer::TileRenderer()
 {
@@ -565,6 +573,75 @@ bool TileRenderer::tesselateBlockInWorld(Tile* tile, int x, int y, int z, float 
 		renderEast(tile, float(x), float(y), float(z), tile->getTexture(m_pLevelSource, x, y, z, DIR_XPOS));
 	}
 
+#if defined(MOD_GRASS_SIDE_OVERLAY) and not defined(MOD_DONT_COLOR_GRASS)
+	// grass side overlay rendering
+	if (tile == Tile::grass && ((GrassTile*)tile)->m_bRenderSideOverlay)
+	{
+		if (m_bDisableCulling || tile->shouldRenderFace(m_pLevelSource, x, y, z - 1, DIR_ZNEG))
+		{
+			if (tile->getTexture(m_pLevelSource, x, y, z, DIR_ZNEG) == TEXTURE_GRASS_SIDE)
+			{
+				bDrewAnything = true;
+
+				float fLight = tile->getBrightness(m_pLevelSource, x, y, z - 1);
+				if (tile->m_aabb.min.z > 0.0f)
+					fLight = fLightHere;
+
+				t.color(topR * 0.8f * fLight, topG * 0.8f * fLight, topB * 0.8f * fLight);
+
+				renderNorth(tile, float(x), float(y), float(z), TEXTURE_GRASS_SIDE_OVERLAY);
+			}
+		}
+
+		if (m_bDisableCulling || tile->shouldRenderFace(m_pLevelSource, x, y, z + 1, DIR_ZPOS))
+		{
+			if (tile->getTexture(m_pLevelSource, x, y, z, DIR_ZPOS) == TEXTURE_GRASS_SIDE)
+			{
+				bDrewAnything = true;
+
+				float fLight = tile->getBrightness(m_pLevelSource, x, y, z + 1);
+				if (tile->m_aabb.max.z < 1.0f)
+					fLight = fLightHere;
+
+				t.color(topR * 0.8f * fLight, topG * 0.8f * fLight, topB * 0.8f * fLight);
+
+				renderSouth(tile, float(x), float(y), float(z), TEXTURE_GRASS_SIDE_OVERLAY);
+			}
+		}
+
+		if (m_bDisableCulling || tile->shouldRenderFace(m_pLevelSource, x - 1, y, z, DIR_XNEG))
+		{
+			if (tile->getTexture(m_pLevelSource, x, y, z, DIR_XNEG) == TEXTURE_GRASS_SIDE)
+			{
+				bDrewAnything = true;
+
+				float fLight = tile->getBrightness(m_pLevelSource, x - 1, y, z);
+				if (tile->m_aabb.min.x > 0.0f)
+					fLight = fLightHere;
+
+				t.color(topR * 0.6f * fLight, topG * 0.6f * fLight, topB * 0.6f * fLight);
+
+				renderWest(tile, float(x), float(y), float(z), TEXTURE_GRASS_SIDE_OVERLAY);
+			}
+		}
+
+		if (m_bDisableCulling || tile->shouldRenderFace(m_pLevelSource, x + 1, y, z, DIR_XPOS))
+		{
+			if (tile->getTexture(m_pLevelSource, x, y, z, DIR_XPOS) == TEXTURE_GRASS_SIDE)
+			{
+				bDrewAnything = true;
+
+				float fLight = tile->getBrightness(m_pLevelSource, x + 1, y, z);
+				if (tile->m_aabb.max.x < 1.0f)
+					fLight = fLightHere;
+
+				t.color(topR * 0.6f * fLight, topG * 0.6f * fLight, topB * 0.6f * fLight);
+
+				renderEast(tile, float(x), float(y), float(z), TEXTURE_GRASS_SIDE_OVERLAY);
+			}
+		}
+	}
+#endif
 	return bDrewAnything;
 }
 
@@ -1260,6 +1337,8 @@ bool TileRenderer::tesselateInWorld(Tile* tile, int x, int y, int z)
 			return tesselateDoorInWorld(tile, x, y, z);
 		case SHAPE_STAIRS:
 			return tesselateStairsInWorld(tile, x, y, z);
+		/*case SHAPE_CACTUS:
+			return tesselateCactusInWorld(tile, x, y, z);*/
 	}
 
 	return false;
@@ -2559,6 +2638,80 @@ bool TileRenderer::tesselateBlockInWorldWithAmbienceOcclusionV2(Tile* tile, int 
 
 		m_bAmbientOcclusion = false;
 	}
+
+#if defined(MOD_GRASS_SIDE_OVERLAY) and not defined(MOD_DONT_COLOR_GRASS)
+	// grass side overlay rendering
+	if (tile == Tile::grass && ((GrassTile*)tile)->m_bRenderSideOverlay)
+	{
+		// Render all the faces.
+		for (int dir = DIR_ZNEG; dir <= DIR_XPOS; dir++)
+		{
+			int tileX = x + diffX[dir], tileY = y + diffY[dir], tileZ = z + diffZ[dir];
+
+			// check if we should bother in the first place
+			if (!m_bDisableCulling && !tile->shouldRenderFace(m_pLevelSource, tileX, tileY, tileZ, dir))
+			{
+				continue;
+			}
+
+			int texture = tile->getTexture(m_pLevelSource, x, y, z, dir);
+
+			if (texture == TEXTURE_GRASS_SIDE)
+				texture = TEXTURE_GRASS_SIDE_OVERLAY; // grass overlay texture index
+			else
+				break; // this is a grass block with snow on it, just skip it
+
+			float fR = topR, fG = topG, fB = topB;
+
+			for (int i = 0; i < 4; i++)
+				m_vtxRed[i] = m_vtxGreen[i] = m_vtxBlue[i] = 1.0f;
+
+			const int* table = &massLUT[dir * 12];
+
+			for (int i = 0; i < 4; i++)
+			{
+				// average: the light at the tile the face's normal would point towards, and 3 other tiles
+				// chosen based on the vertex corner number
+				float br = lights[dirToEdir[dir]];
+				for (int j = 0; j < 3; j++)
+					br += lights[table[j + i * 3]];
+
+				br *= 0.25f;
+
+				m_vtxRed[i] = br;
+				m_vtxGreen[i] = br;
+				m_vtxBlue[i] = br;
+			}
+
+
+			for (int i = 0; i < 4; i++)
+			{
+				m_vtxRed[i] *= fR * lightingMult[dir];
+				m_vtxGreen[i] *= fG * lightingMult[dir];
+				m_vtxBlue[i] *= fB * lightingMult[dir];
+			}
+
+			m_bAmbientOcclusion = true;
+
+			switch (dir) {
+			case DIR_ZNEG:
+				renderNorth(tile, float(x), float(y), float(z), texture);
+				break;
+			case DIR_ZPOS:
+				renderSouth(tile, float(x), float(y), float(z), texture);
+				break;
+			case DIR_XNEG:
+				renderWest(tile, float(x), float(y), float(z), texture);
+				break;
+			case DIR_XPOS:
+				renderEast(tile, float(x), float(y), float(z), texture);
+				break;
+			}
+
+			m_bAmbientOcclusion = false;
+		}
+	}
+#endif
 
 	return true;
 }

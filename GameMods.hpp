@@ -34,6 +34,7 @@
 //#define MOD_USE_FLAT_WORLD         // Use a flat world instead of the regular world generation
 //#define MOD_USE_BIGGER_SCREEN_SIZE // Use a bigger screen size instead of 854x480
 //#define MOD_DONT_COLOR_GRASS       // Don't give the top of grass tiles a different color. (like Classic)
+//#define MOD_GRASS_SIDE_OVERLAY  // Shade the side faces of grass blocks using the Java Beta 1.5 terrain texture when using Fancy graphics.
 #define MOD_DISABLE_AUTOJUMP       // Disable Autojump, like old Java edition
 #define MOD_JAVA_STARTING_BLOCKS   // Replace the starting hotbar with the items from the Java b1.8 Creative mode starting hotbar
 //#define MOD_EXTRA_BLOCKS           // Adds extra unused blocks from the terrain.png file

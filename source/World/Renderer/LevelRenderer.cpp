@@ -99,6 +99,12 @@ void LevelRenderer::allChanged()
 	pLeaves->m_bTransparent = m_pMinecraft->m_options.m_bFancyGraphics;
 	pLeaves->m_TextureFrame = !pLeaves->m_bTransparent + pLeaves->field_74;
 
+#ifdef MOD_GRASS_SIDE_OVERLAY
+	GrassTile* pGrass = (GrassTile*)Tile::grass;
+
+	pGrass->m_bRenderSideOverlay = m_pMinecraft->m_options.m_bFancyGraphics;
+#endif
+
 	field_BC = m_pMinecraft->m_options.field_10;
 
 	int x1 = 64 << (3 - field_BC);

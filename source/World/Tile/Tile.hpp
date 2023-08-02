@@ -307,6 +307,10 @@ public:
 	int getColor(LevelSource*, int x, int y, int z) override;
 	int getTexture(LevelSource*, int x, int y, int z, int dir) override;
 	void tick(Level*, int x, int y, int z, Random*) override;
+#ifdef MOD_GRASS_SIDE_OVERLAY
+public:
+	bool m_bRenderSideOverlay;
+#endif
 };
 
 class IceTile : public HalfTransparentTile
