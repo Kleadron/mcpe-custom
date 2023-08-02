@@ -51,9 +51,9 @@ void LocalPlayer::calculateFlight(float x, float y, float z)
 
 	float y1 = 0.0f;
 	if (Keyboard::_states[AKEYCODE_BUTTON_R1] == 1)
-		y1 = f1 * 0.2f;
+		y1 = f1 * 0.1f;
 	if (Keyboard::_states[AKEYCODE_BUTTON_L1] == 1)
-		y1 = f1 * -0.2f;
+		y1 = f1 * -0.1f;
 
 	field_BFC += x1;
 	float f2 = m_pMinecraft->m_options.field_8 * 0.35f;
@@ -63,7 +63,7 @@ void LocalPlayer::calculateFlight(float x, float y, float z)
 	if ((f3 <= 0.0f || f3 <= f4) && (f3 >= 0.0f || f3 >= f4))
 		f4 = f3;
 	field_C00 += f4;
-	field_BF0 = f4 * 10.0f;
+	field_BF0 = f4 * 5.0f;
 
 	field_C08 += y1;
 	float f5 = f2 * (field_C08 - field_C0C);
@@ -72,7 +72,7 @@ void LocalPlayer::calculateFlight(float x, float y, float z)
 	if ((f5 <= 0.0f || f5 <= f6) && (f5 >= 0.0f || f5 >= f6))
 		f6 = f5;
 	field_C0C += f6;
-	field_BF4 = f6 * 10.0f;
+	field_BF4 = f6 * 5.0f;
 
 	field_C14 += z1;
 	float f7 = f2 * (field_C14 - field_C18);
@@ -81,7 +81,7 @@ void LocalPlayer::calculateFlight(float x, float y, float z)
 	if ((f7 <= 0.0f || f7 <= f8) && (f7 >= 0.0f || f7 >= f8))
 		f8 = f7;
 	field_C18 += f8;
-	field_BF8 = f8 * 10.0f;
+	field_BF8 = f8 * 5.0f;
 }
 
 void LocalPlayer::closeContainer()
