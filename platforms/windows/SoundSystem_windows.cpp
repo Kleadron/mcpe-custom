@@ -10,6 +10,8 @@
 #include "../../source/Base/Utils.hpp"
 #include "SoundSystem_windows.hpp"
 
+#define MAX_BUFFERS_FOR_SOUND 4
+
 SoundSystemWindows::SoundSystemWindows()
 {
 	printf("Init SoundSystemWindows\n");
@@ -75,11 +77,17 @@ SoundSystemWindows::~SoundSystemWindows()
 	m_directsound->Release();
 
 	//Delete sounds (Releasing directsound releases sounds for us)
-	for (size_t i = 0; i < m_buffers.size(); i++)
+	for (size_t i = 0; i < m_allocatedBuffers.size(); i++)
 	{
-		delete m_buffers[i];
+		delete m_allocatedBuffers[i];
 	}
 
+	// Delete vectors from playable buffers map
+	std::map<PCMSoundHeader*, std::vector<LPDIRECTSOUNDBUFFER*>*>::iterator it;
+	for (it = m_playableBuffers.begin(); it != m_playableBuffers.end(); it++)
+	{
+		delete it->second;
+	}
 }
 
 
@@ -105,8 +113,8 @@ void SoundSystemWindows::setListenerAngle(float degyaw, float degpitch)
 		return;
 	}
 
-	float yaw = degyaw * M_PI / 180.f;
-	float pitch = degpitch * M_PI / 180.f;
+	float yaw = degyaw * (float)M_PI / 180.f;
+	float pitch = degpitch * (float)M_PI / 180.f;
 
 	float lx = cosf(pitch) * sinf(yaw);
 	float ly = -sinf(pitch);
@@ -135,6 +143,28 @@ void SoundSystemWindows::stop(const std::string& sound)
 {
 }
 
+void SoundSystemWindows::apply3D(LPDIRECTSOUNDBUFFER* soundbuffer, float x, float y, float z)
+{
+	//Check if position is not 0,0,0 and for mono to play 3D sound
+	LPDIRECTSOUND3DBUFFER8 object3d;
+
+	HRESULT hr = (*soundbuffer)->QueryInterface(IID_IDirectSound3DBuffer8,
+		(LPVOID*)&object3d);
+	if (FAILED(hr)) {
+		printf("SoundSystemWindows QueryInterface failed for 3D Object\n");
+		return;
+	}
+
+	object3d->SetPosition(
+		x,
+		y,
+		-z,
+		DS3D_IMMEDIATE);
+
+	//Im not really sure what values original MCPE would use.
+	object3d->SetMinDistance(4.f, DS3D_IMMEDIATE);
+	object3d->SetMaxDistance(100.f, DS3D_IMMEDIATE);
+}
 
 void SoundSystemWindows::playAt(const SoundDesc& sound, float x, float y, float z, float volume, float pitch)
 {
@@ -150,17 +180,75 @@ void SoundSystemWindows::playAt(const SoundDesc& sound, float x, float y, float 
 		return;
 	}
   
-	//Release sounds that finished playing
-	for (size_t i = 0; i < m_buffers.size(); i++)
+	// references:
+	// https://gamedev.net/forums/topic/337397-sound-volume-question-directsound/3243306/
+	// https://learn.microsoft.com/en-us/previous-versions/windows/desktop/mt708939(v=vs.85)
+	// Conversion from 0-1 linear volume to directsound logarithmic volume..
+	// This seems to work for the most part, but accuracy testing should be done for actual MCPE, water splashing is pretty quiet.
+	float attenuation = volume;//Lerp(DSBVOLUME_MIN, DSBVOLUME_MAX, volume);
+
+	// clamp the attenuation value
+	if (attenuation < 0.0f)
+		attenuation = 0.0f;
+	else if (attenuation > 1.0f)
+		attenuation = 1.0f;
+
+	if (attenuation == 0)
+	{
+		// no sound would come out, maybe skip playing this sound?
+		//attenuation = DSBVOLUME_MIN;
+		return;
+	}
+	else
+	{
+		attenuation = floorf(2000.0f * log10f(attenuation) + 0.5f);
+	}
+
+	// Reconfigure and replay sounds that finished playing to save allocations
+	if (m_playableBuffers.count(sound.m_pHeader) == 0)
+	{
+		m_playableBuffers[sound.m_pHeader] = new std::vector<LPDIRECTSOUNDBUFFER*>;
+	}
+
+	bool is2D = sqrtf(x * x + y * y + z * z) == 0.f;
+
+	std::vector<LPDIRECTSOUNDBUFFER*> *buffersForSound = m_playableBuffers[sound.m_pHeader];
+	for (size_t i = 0; i < buffersForSound->size(); i++)
 	{
 		DWORD status;
-		(*m_buffers[i])->GetStatus(&status);
-		if (status != DSBSTATUS_PLAYING) {
-			(*m_buffers[i])->Release();
+		LPDIRECTSOUNDBUFFER *buffer = buffersForSound->at(i);
+		(*buffer)->GetStatus(&status);
+		if (!(status & DSBSTATUS_PLAYING)) 
+		{
+			(*buffer)->Stop();
+			(*buffer)->SetVolume(LONG(attenuation));
+			DWORD freq = DWORD(float(sound.m_pHeader->m_sample_rate) * pitch);
+			HRESULT freqresult = (*buffer)->SetFrequency(freq);
+			(*buffer)->SetCurrentPosition(0); // Not entirely sure if this is necessary
+
+			if (!is2D && sound.m_pHeader->m_channels == 1)
+			{
+				apply3D(buffer, x, y, z);
+			}
+
+			(*buffer)->Play(0, 0, 0);
+
+			//LogMsg("Re-using sound buffer.");
+
+			/*(*m_buffers[i])->Release();
 			delete m_buffers[i];
-			m_buffers.erase(m_buffers.begin() + i);
+			m_buffers.erase(m_buffers.begin() + i);*/
+			return;
 		}
 	}
+
+	// no sound
+	if (buffersForSound->size() >= MAX_BUFFERS_FOR_SOUND)
+	{
+		return;
+	}
+
+	//LogMsg("Allocating new sound.");
 
 	HRESULT result;
 	IDirectSoundBuffer* tempBuffer;
@@ -168,13 +256,12 @@ void SoundSystemWindows::playAt(const SoundDesc& sound, float x, float y, float 
 	unsigned long bufferSize;
 
 	int length = sound.m_pHeader->m_length * sound.m_pHeader->m_bytes_per_sample;
-	bool is2D = sqrtf(x * x + y * y + z * z) == 0.f;
 
 	LPDIRECTSOUNDBUFFER* soundbuffer = (LPDIRECTSOUNDBUFFER*)calloc(1, sizeof(LPDIRECTSOUNDBUFFER));
 
 	WAVEFORMATEX waveFormat;
 	waveFormat.wFormatTag = WAVE_FORMAT_PCM;
-	waveFormat.nSamplesPerSec = DWORD(float(sound.m_pHeader->m_sample_rate) * pitch);
+	waveFormat.nSamplesPerSec = sound.m_pHeader->m_sample_rate;
 	waveFormat.wBitsPerSample = 8 * sound.m_pHeader->m_bytes_per_sample;
 	waveFormat.nChannels = sound.m_pHeader->m_channels;
 	waveFormat.nBlockAlign = (waveFormat.wBitsPerSample / 8) * waveFormat.nChannels;
@@ -188,11 +275,11 @@ void SoundSystemWindows::playAt(const SoundDesc& sound, float x, float y, float 
 	//Because directsound does not support DSBCAPS_CTRL3D on a sound with 2 channels we can only do it on sounds with 1 channel
 	if (sound.m_header.m_channels == 1)
 	{
-		bufferDesc.dwFlags = DSBCAPS_CTRLVOLUME | DSBCAPS_GLOBALFOCUS | DSBCAPS_CTRL3D;
+		bufferDesc.dwFlags = DSBCAPS_CTRLVOLUME | DSBCAPS_CTRLFREQUENCY | DSBCAPS_GLOBALFOCUS | DSBCAPS_CTRL3D;
 	}
 	else
 	{
-		bufferDesc.dwFlags = DSBCAPS_CTRLVOLUME | DSBCAPS_GLOBALFOCUS;
+		bufferDesc.dwFlags = DSBCAPS_CTRLVOLUME | DSBCAPS_CTRLFREQUENCY | DSBCAPS_GLOBALFOCUS;
 	}
 
 	bufferDesc.dwBufferBytes = length;
@@ -241,56 +328,16 @@ void SoundSystemWindows::playAt(const SoundDesc& sound, float x, float y, float 
 		return;
 	}
 
-	// references:
-	// https://gamedev.net/forums/topic/337397-sound-volume-question-directsound/3243306/
-	// https://learn.microsoft.com/en-us/previous-versions/windows/desktop/mt708939(v=vs.85)
-	// Conversion from 0-1 linear volume to directsound logarithmic volume..
-	// This seems to work for the most part, but accuracy testing should be done for actual MCPE, water splashing is pretty quiet.
-	float attenuation = volume;//Lerp(DSBVOLUME_MIN, DSBVOLUME_MAX, volume);
-
-	// clamp the attenuation value
-	if (attenuation < 0.0f)
-		attenuation = 0.0f;
-	else if (attenuation > 1.0f)
-		attenuation = 1.0f;
-
-	if (attenuation == 0)
-	{
-		// no sound would come out, maybe skip playing this sound?
-		attenuation = DSBVOLUME_MIN;
-	}
-	else
-	{
-		attenuation = floorf(2000.0f * log10f(attenuation) + 0.5f);
-	}
 	(*soundbuffer)->SetVolume(LONG(attenuation));
+	DWORD freq = DWORD(float(sound.m_pHeader->m_sample_rate) * pitch);
+	HRESULT freqresult = (*soundbuffer)->SetFrequency(freq);
 
-	//Check if position is not 0,0,0 and for mono to play 3D sound
-	if (!is2D && sound.m_pHeader->m_channels == 1) 
+	if (!is2D && sound.m_pHeader->m_channels == 1)
 	{
-		LPDIRECTSOUND3DBUFFER8 object3d;
-
-		HRESULT hr = (*soundbuffer)->QueryInterface(IID_IDirectSound3DBuffer8,
-			(LPVOID*)&object3d);
-		if (FAILED(hr)) {
-			printf("SoundSystemWindows QueryInterface failed for 3D Object\n");
-			return;
-		}
-
-		D3DVECTOR listenerpos;
-		(*m_listener)->GetPosition(&listenerpos);
-
-		object3d->SetPosition(
-			x, 
-			y,
-			-z, 
-		DS3D_IMMEDIATE); 
-
-		//Im not really sure what values original MCPE would use.
-		object3d->SetMinDistance(0.f, DS3D_IMMEDIATE); 
-		object3d->SetMaxDistance(100.f, DS3D_IMMEDIATE);
+		apply3D(soundbuffer, x, y, z);
 	}
 
 	(*soundbuffer)->Play(0, 0, 0);
-	m_buffers.push_back(soundbuffer);
+	m_allocatedBuffers.push_back(soundbuffer);
+	m_playableBuffers[sound.m_pHeader]->push_back(soundbuffer);
 }
