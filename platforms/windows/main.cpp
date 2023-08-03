@@ -317,6 +317,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLin
 			// update our stuff here:
 			g_pApp->update();
 
+			// note: NinecraftApp would have done this with eglSwapBuffers, but I'd rather do it here:
+			SwapBuffers(hDC);
+
 			if (wantVSync)
 			{
 				// todo: check if DWM sync is appropriate for versions over 7/vista
@@ -338,9 +341,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLin
 			{
 				xglSwapIntervalEXT(0);
 			}
-
-			// note: NinecraftApp would have done this with eglSwapBuffers, but I'd rather do it here:
-			SwapBuffers(hDC);
 		}
 	}
 
