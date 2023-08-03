@@ -30,6 +30,7 @@
     <ClInclude Include="..\compat\AKeyCodes.hpp" />
     <ClInclude Include="..\GameMods.hpp" />
     <ClInclude Include="..\platforms\windows\AppPlatform_windows.hpp" />
+    <ClInclude Include="..\platforms\windows\SoundBufferReleaseHack.h" />
     <ClInclude Include="..\platforms\windows\SoundSystem_windows.hpp" />
     <ClInclude Include="..\source\App\App.hpp" />
     <ClInclude Include="..\source\App\AppPlatform.hpp" />
@@ -325,6 +326,7 @@
     <ClCompile Include="..\compat\GLExt.cpp" />
     <ClCompile Include="..\platforms\windows\AppPlatform_windows.cpp" />
     <ClCompile Include="..\platforms\windows\main.cpp" />
+    <ClCompile Include="..\platforms\windows\SoundBufferReleaseHack.c" />
     <ClCompile Include="..\platforms\windows\SoundSystem_windows.cpp" />
     <ClCompile Include="..\source\App\App.cpp" />
     <ClCompile Include="..\source\App\AppPlatform.cpp" />

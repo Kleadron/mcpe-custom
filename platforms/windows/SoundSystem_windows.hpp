@@ -37,12 +37,12 @@ public:
 	virtual void pause(const std::string& sound);
 	virtual void stop(const std::string& sound);
 	virtual void playAt(const SoundDesc& sound, float x, float y, float z, float a, float b);
-	void apply3D(LPDIRECTSOUNDBUFFER* soundbuffer, float x, float y, float z);
+	void apply3D(LPDIRECTSOUNDBUFFER soundbuffer, float x, float y, float z);
 private:
 	bool m_available = false;
 	IDirectSound8* m_directsound;
 	IDirectSoundBuffer* m_primarybuffer;
-	LPDIRECTSOUND3DLISTENER8* m_listener;
-	std::map<PCMSoundHeader*, std::vector<LPDIRECTSOUNDBUFFER*>*> m_playableBuffers;
-	std::vector<LPDIRECTSOUNDBUFFER*> m_allocatedBuffers;
+	LPDIRECTSOUND3DLISTENER8 m_listener;
+	std::map<PCMSoundHeader*, LPDIRECTSOUNDBUFFER> m_sourceBuffers;
+	std::vector<LPDIRECTSOUNDBUFFER> m_playingBuffers;
 };

@@ -557,6 +557,17 @@ void Minecraft::tick()
 
 void Minecraft::update()
 {
+	/*m_pSoundEngine->play("random.splash");
+	m_pSoundEngine->play("random.explode");
+	m_pSoundEngine->play("random.click");
+
+	m_pSoundEngine->play("step.cloth");
+	m_pSoundEngine->play("step.grass");
+	m_pSoundEngine->play("step.gravel");
+	m_pSoundEngine->play("step.sand");
+	m_pSoundEngine->play("step.stone");
+	m_pSoundEngine->play("step.wood");*/
+
 #ifndef ORIGINAL_CODE
 	tickMouse();
 #endif

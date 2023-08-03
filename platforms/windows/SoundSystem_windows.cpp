@@ -9,8 +9,7 @@
 
 #include "../../source/Base/Utils.hpp"
 #include "SoundSystem_windows.hpp"
-
-#define MAX_BUFFERS_FOR_SOUND 4
+#include "SoundBufferReleaseHack.h"
 
 SoundSystemWindows::SoundSystemWindows()
 {
@@ -49,10 +48,10 @@ SoundSystemWindows::SoundSystemWindows()
 		return;
 	}
 
-	m_listener = (LPDIRECTSOUND3DLISTENER8*)calloc(1, sizeof(LPDIRECTSOUND3DLISTENER8));
+	m_listener = (LPDIRECTSOUND3DLISTENER8)calloc(1, sizeof(LPDIRECTSOUND3DLISTENER8));
 
 	result = m_primarybuffer->QueryInterface(IID_IDirectSound3DListener8,
-		(LPVOID*)m_listener);
+		(LPVOID*)&m_listener);
 	m_primarybuffer->Release();
 
 	if (FAILED(result))
@@ -77,17 +76,20 @@ SoundSystemWindows::~SoundSystemWindows()
 	m_directsound->Release();
 
 	//Delete sounds (Releasing directsound releases sounds for us)
-	for (size_t i = 0; i < m_allocatedBuffers.size(); i++)
+	/*for (size_t i = 0; i < m_playingBuffers.size(); i++)
 	{
-		delete m_allocatedBuffers[i];
-	}
+		delete m_playingBuffers[i];
+	}*/
 
 	// Delete vectors from playable buffers map
-	std::map<PCMSoundHeader*, std::vector<LPDIRECTSOUNDBUFFER*>*>::iterator it;
-	for (it = m_playableBuffers.begin(); it != m_playableBuffers.end(); it++)
+	/*std::map<PCMSoundHeader*, LPDIRECTSOUNDBUFFER>::iterator it;
+	for (it = m_sourceBuffers.begin(); it != m_sourceBuffers.end(); it++)
 	{
 		delete it->second;
-	}
+	}*/
+
+	m_playingBuffers.clear();
+	m_sourceBuffers.clear();
 }
 
 
@@ -102,7 +104,7 @@ void SoundSystemWindows::setListenerPos(float x, float y, float z)
 	{
 		return;
 	}
-	(*m_listener)->SetPosition(x, y, -z, DS3D_IMMEDIATE);
+	m_listener->SetPosition(x, y, -z, DS3D_IMMEDIATE);
 }
 
 
@@ -124,7 +126,7 @@ void SoundSystemWindows::setListenerAngle(float degyaw, float degpitch)
 	float uy = cosf(pitch);
 	float uz = sinf(pitch) * cosf(yaw);
 
-	(*m_listener)->SetOrientation(-lx,-ly,-lz, ux,uy,uz, DS3D_IMMEDIATE);
+	m_listener->SetOrientation(-lx,-ly,-lz, ux,uy,uz, DS3D_IMMEDIATE);
 }
 
 void SoundSystemWindows::load(const std::string& sound)
@@ -143,12 +145,12 @@ void SoundSystemWindows::stop(const std::string& sound)
 {
 }
 
-void SoundSystemWindows::apply3D(LPDIRECTSOUNDBUFFER* soundbuffer, float x, float y, float z)
+void SoundSystemWindows::apply3D(LPDIRECTSOUNDBUFFER soundbuffer, float x, float y, float z)
 {
 	//Check if position is not 0,0,0 and for mono to play 3D sound
 	LPDIRECTSOUND3DBUFFER8 object3d;
 
-	HRESULT hr = (*soundbuffer)->QueryInterface(IID_IDirectSound3DBuffer8,
+	HRESULT hr = soundbuffer->QueryInterface(IID_IDirectSound3DBuffer8,
 		(LPVOID*)&object3d);
 	if (FAILED(hr)) {
 		printf("SoundSystemWindows QueryInterface failed for 3D Object\n");
@@ -179,6 +181,8 @@ void SoundSystemWindows::playAt(const SoundDesc& sound, float x, float y, float 
 	{
 		return;
 	}
+
+	HRESULT result;
   
 	// references:
 	// https://gamedev.net/forums/topic/337397-sound-volume-question-directsound/3243306/
@@ -204,140 +208,120 @@ void SoundSystemWindows::playAt(const SoundDesc& sound, float x, float y, float 
 		attenuation = floorf(2000.0f * log10f(attenuation) + 0.5f);
 	}
 
-	// Reconfigure and replay sounds that finished playing to save allocations
-	if (m_playableBuffers.count(sound.m_pHeader) == 0)
+	LPDIRECTSOUNDBUFFER sourcebuffer;
+	if (m_sourceBuffers.count(sound.m_pHeader) > 0)
 	{
-		m_playableBuffers[sound.m_pHeader] = new std::vector<LPDIRECTSOUNDBUFFER*>;
-	}
-
-	bool is2D = sqrtf(x * x + y * y + z * z) == 0.f;
-
-	std::vector<LPDIRECTSOUNDBUFFER*> *buffersForSound = m_playableBuffers[sound.m_pHeader];
-	for (size_t i = 0; i < buffersForSound->size(); i++)
-	{
-		DWORD status;
-		LPDIRECTSOUNDBUFFER *buffer = buffersForSound->at(i);
-		(*buffer)->GetStatus(&status);
-		if (!(status & DSBSTATUS_PLAYING)) 
-		{
-			(*buffer)->Stop();
-			(*buffer)->SetVolume(LONG(attenuation));
-			DWORD freq = DWORD(float(sound.m_pHeader->m_sample_rate) * pitch);
-			HRESULT freqresult = (*buffer)->SetFrequency(freq);
-			(*buffer)->SetCurrentPosition(0); // Not entirely sure if this is necessary
-
-			if (!is2D && sound.m_pHeader->m_channels == 1)
-			{
-				apply3D(buffer, x, y, z);
-			}
-
-			(*buffer)->Play(0, 0, 0);
-
-			//LogMsg("Re-using sound buffer.");
-
-			/*(*m_buffers[i])->Release();
-			delete m_buffers[i];
-			m_buffers.erase(m_buffers.begin() + i);*/
-			return;
-		}
-	}
-
-	// no sound
-	if (buffersForSound->size() >= MAX_BUFFERS_FOR_SOUND)
-	{
-		return;
-	}
-
-	//LogMsg("Allocating new sound.");
-
-	HRESULT result;
-	IDirectSoundBuffer* tempBuffer;
-	unsigned char* bufferPtr;
-	unsigned long bufferSize;
-
-	int length = sound.m_pHeader->m_length * sound.m_pHeader->m_bytes_per_sample;
-
-	LPDIRECTSOUNDBUFFER* soundbuffer = (LPDIRECTSOUNDBUFFER*)calloc(1, sizeof(LPDIRECTSOUNDBUFFER));
-
-	WAVEFORMATEX waveFormat;
-	waveFormat.wFormatTag = WAVE_FORMAT_PCM;
-	waveFormat.nSamplesPerSec = sound.m_pHeader->m_sample_rate;
-	waveFormat.wBitsPerSample = 8 * sound.m_pHeader->m_bytes_per_sample;
-	waveFormat.nChannels = sound.m_pHeader->m_channels;
-	waveFormat.nBlockAlign = (waveFormat.wBitsPerSample / 8) * waveFormat.nChannels;
-	waveFormat.nAvgBytesPerSec = waveFormat.nSamplesPerSec * waveFormat.nBlockAlign;
-	waveFormat.cbSize = 0;
-
-	// Set the buffer description of the secondary sound buffer that the wave file will be loaded onto.
-	DSBUFFERDESC bufferDesc;
-	bufferDesc.dwSize = sizeof(DSBUFFERDESC);
-
-	//Because directsound does not support DSBCAPS_CTRL3D on a sound with 2 channels we can only do it on sounds with 1 channel
-	if (sound.m_header.m_channels == 1)
-	{
-		bufferDesc.dwFlags = DSBCAPS_CTRLVOLUME | DSBCAPS_CTRLFREQUENCY | DSBCAPS_GLOBALFOCUS | DSBCAPS_CTRL3D;
+		sourcebuffer = m_sourceBuffers[sound.m_pHeader];
 	}
 	else
 	{
-		bufferDesc.dwFlags = DSBCAPS_CTRLVOLUME | DSBCAPS_CTRLFREQUENCY | DSBCAPS_GLOBALFOCUS;
+		unsigned char* bufferPtr;
+		unsigned long bufferSize;
+
+		int length = sound.m_pHeader->m_length * sound.m_pHeader->m_bytes_per_sample;
+
+		//sourcebuffer = (LPDIRECTSOUNDBUFFER)calloc(1, sizeof(LPDIRECTSOUNDBUFFER));
+
+		WAVEFORMATEX waveFormat;
+		waveFormat.wFormatTag = WAVE_FORMAT_PCM;
+		waveFormat.nSamplesPerSec = sound.m_pHeader->m_sample_rate;
+		waveFormat.wBitsPerSample = 8 * sound.m_pHeader->m_bytes_per_sample;
+		waveFormat.nChannels = sound.m_pHeader->m_channels;
+		waveFormat.nBlockAlign = (waveFormat.wBitsPerSample / 8) * waveFormat.nChannels;
+		waveFormat.nAvgBytesPerSec = waveFormat.nSamplesPerSec * waveFormat.nBlockAlign;
+		waveFormat.cbSize = 0;
+
+		// Set the buffer description of the secondary sound buffer that the wave file will be loaded onto.
+		DSBUFFERDESC bufferDesc;
+		bufferDesc.dwSize = sizeof(DSBUFFERDESC);
+
+		//Because directsound does not support DSBCAPS_CTRL3D on a sound with 2 channels we can only do it on sounds with 1 channel
+		if (sound.m_header.m_channels == 1)
+		{
+			bufferDesc.dwFlags = DSBCAPS_CTRLVOLUME | DSBCAPS_CTRLFREQUENCY | DSBCAPS_GLOBALFOCUS | DSBCAPS_CTRL3D;
+		}
+		else
+		{
+			bufferDesc.dwFlags = DSBCAPS_CTRLVOLUME | DSBCAPS_CTRLFREQUENCY | DSBCAPS_GLOBALFOCUS;
+		}
+
+		bufferDesc.dwBufferBytes = length;
+		bufferDesc.dwReserved = 0;
+		bufferDesc.lpwfxFormat = &waveFormat;
+		bufferDesc.guid3DAlgorithm = GUID_NULL;
+
+		// Create a temporary sound buffer with the specific buffer settings.
+		result = m_directsound->CreateSoundBuffer(&bufferDesc, &sourcebuffer, NULL);
+		if (FAILED(result))
+		{
+			printf("SoundSystemWindows CreateSoundBuffer failed\n");
+			return;
+		}
+
+		// Lock the secondary buffer to write wave data into it.
+		result = sourcebuffer->Lock(0, length, (void**)&bufferPtr, (DWORD*)&bufferSize, NULL, 0, 0);
+		if (FAILED(result))
+		{
+			printf("SoundSystemWindows lock failed\n");
+			return;
+			//return false;
+		}
+
+		// Copy the wave data into the buffer.
+		memcpy(bufferPtr, sound.m_pData, length);
+
+		// Unlock the secondary buffer after the data has been written to it.
+		result = sourcebuffer->Unlock((void*)bufferPtr, bufferSize, NULL, 0);
+		if (FAILED(result))
+		{
+			printf("SoundSystemWindows unlock failed\n");
+			return;
+		}
+
+		m_sourceBuffers[sound.m_pHeader] = sourcebuffer;
+	}
+	
+	bool is2D = sqrtf(x * x + y * y + z * z) == 0.f;
+
+	//std::vector<LPDIRECTSOUNDBUFFER*> *buffersForSound = m_playableBuffers[sound.m_pHeader];
+	for (size_t i = 0; i < m_playingBuffers.size(); i++)
+	{
+		DWORD status;
+		LPDIRECTSOUNDBUFFER buffer = m_playingBuffers[i];
+		buffer->GetStatus(&status);
+		if (!(status & DSBSTATUS_PLAYING)) 
+		{
+			//ReleaseDirectSoundBuffer(buffer);
+			m_playingBuffers[i]->Release();
+			m_playingBuffers.erase(m_playingBuffers.begin() + i);
+		}
 	}
 
-	bufferDesc.dwBufferBytes = length;
-	bufferDesc.dwReserved = 0;
-	bufferDesc.lpwfxFormat = &waveFormat;
-	bufferDesc.guid3DAlgorithm = GUID_NULL;
+	//LogMsg("Allocating new sound.");
+	LPDIRECTSOUNDBUFFER soundbuffer = NULL;
+	result = m_directsound->DuplicateSoundBuffer(sourcebuffer, &soundbuffer);
 
-	// Create a temporary sound buffer with the specific buffer settings.
-	result = m_directsound->CreateSoundBuffer(&bufferDesc, &tempBuffer, NULL);
 	if (FAILED(result))
 	{
-		printf("SoundSystemWindows CreateSoundBuffer failed\n");
+		printf("SoundSystemWindows DuplicateSoundBuffer failed\n");
 		return;
 	}
-
-	// Test the buffer format against the direct sound 8 interface and create the secondary buffer.
-	result = tempBuffer->QueryInterface(IID_IDirectSoundBuffer8, (LPVOID*)soundbuffer);
-	if (FAILED(result))
-	{
-		printf("SoundSystemWindows tempBuffer QueryInterface failed\n");
-		return;
-	}
-
-	// Release the temporary buffer.
-	tempBuffer->Release();
-	tempBuffer = 0;
-
-
-	// Lock the secondary buffer to write wave data into it.
-	result = (*soundbuffer)->Lock(0, length, (void**)&bufferPtr, (DWORD*)&bufferSize, NULL, 0, 0);
-	if (FAILED(result))
-	{
-		printf("SoundSystemWindows lock failed\n");
-		return;
-		//return false;
-	}
-
-	// Copy the wave data into the buffer.
-	memcpy(bufferPtr, sound.m_pData, length);
-
-	// Unlock the secondary buffer after the data has been written to it.
-	result = (*soundbuffer)->Unlock((void*)bufferPtr, bufferSize, NULL, 0);
-	if (FAILED(result))
-	{
-		printf("SoundSystemWindows unlock failed\n");
-		return;
-	}
-
-	(*soundbuffer)->SetVolume(LONG(attenuation));
+	
+	soundbuffer->SetVolume(LONG(attenuation));
 	DWORD freq = DWORD(float(sound.m_pHeader->m_sample_rate) * pitch);
-	HRESULT freqresult = (*soundbuffer)->SetFrequency(freq);
+	HRESULT freqresult = soundbuffer->SetFrequency(freq);
+
+	if (FAILED(freqresult))
+	{
+		printf("SoundSystemWindows SetFrequency failed\n");
+	}
 
 	if (!is2D && sound.m_pHeader->m_channels == 1)
 	{
 		apply3D(soundbuffer, x, y, z);
 	}
 
-	(*soundbuffer)->Play(0, 0, 0);
-	m_allocatedBuffers.push_back(soundbuffer);
-	m_playableBuffers[sound.m_pHeader]->push_back(soundbuffer);
+	soundbuffer->Play(0, 0, 0);
+	m_playingBuffers.push_back(soundbuffer);
+	
 }
