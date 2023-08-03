@@ -9,11 +9,15 @@
 #include "ExternalFileLevelStorageSource.hpp"
 #include "ExternalFileLevelStorage.hpp"
 #include "Util.hpp"
+#ifdef _WIN32
+#include <shlobj_core.h>
+#endif
 
 ExternalFileLevelStorageSource::ExternalFileLevelStorageSource(const std::string& path)
 {
 	m_worldsPath = path;
 
+#if defined(ORIGINAL_CODE) and not defined(_WIN32)
 	m_worldsPath += "/games";
 	if (createFolderIfNotExists(m_worldsPath.c_str()))
 	{
@@ -30,6 +34,29 @@ ExternalFileLevelStorageSource::ExternalFileLevelStorageSource(const std::string
 	}
 
 	m_worldsPath = path + "/games" + "/com.mojang" + "/minecraftWorlds";
+#else
+	CHAR appdatapath[MAX_PATH];
+	HRESULT result = SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, SHGFP_TYPE_CURRENT, appdatapath);
+
+	static char str[MAX_PATH];
+
+	if (result == S_OK)
+		sprintf(str, "%s\\%s", appdatapath, "MCPE\\games\\com.mojang\\minecraftWorlds");
+	else
+		sprintf(str, "%s\\%s", ".", "games\\com.mojang\\minecraftWorlds");
+
+	// https://stackoverflow.com/a/8233867
+	DWORD ftyp = GetFileAttributesA(str);
+
+	DWORD error = GetLastError();
+	if (error == ERROR_PATH_NOT_FOUND || error == ERROR_FILE_NOT_FOUND || error == ERROR_INVALID_NAME)
+	{
+		// https://stackoverflow.com/a/22182041
+		SHCreateDirectoryEx(NULL, str, NULL);
+	}
+
+	m_worldsPath = std::string(str);
+#endif
 }
 
 std::string ExternalFileLevelStorageSource::getName()
