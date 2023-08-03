@@ -88,11 +88,15 @@ void IngameBlockSelectionScreen::renderSlots()
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	m_pMinecraft->m_pTextures->loadAndBindTexture("gui/gui.png");
 
+	glEnable(GL_BLEND);
+
 	for (int y = 0; y != -22 * C_SLOTS_HEIGHT; y -= 22)
 		blit(m_width / 2 - 182 / 2, m_height - 66 + y, 0, 0, 182, 22, 0, 0);
 
 	if (m_selectedSlot >= 0)
 		blit(m_width / 2 - 92 + 20 * (m_selectedSlot % 9), m_height - 67 - 22 * (m_selectedSlot / 9), 0, 22, 24, 22, 0, 0);
+
+	glDisable(GL_BLEND);
 
 	for (int y = 0, index = 9; y < C_SLOTS_HEIGHT; y++)
 	{
@@ -122,12 +126,14 @@ void IngameBlockSelectionScreen::render(int x, int y, float f)
 
 	fill(0, 0, m_width, m_height, 0x80000000);
 
-	glEnable(GL_BLEND);
+	//glEnable(GL_BLEND);
 	renderSlots();
 
 #ifdef DEMO
 	renderDemoOverlay();
 #endif
+
+	//glDisable(GL_BLEND);
 
 	glEnable(GL_DEPTH_TEST);
 }
