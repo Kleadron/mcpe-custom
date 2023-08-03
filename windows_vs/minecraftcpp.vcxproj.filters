@@ -1085,6 +1085,9 @@
     </ClCompile>
     <ClCompile Include="..\platforms\windows\SoundBufferReleaseHack.c">
       <Filter>Source Files\App</Filter>
+	</ClInclude>
+    <ClCompile Include="..\source\World\Renderer\ItemSpriteRenderer.cpp">
+      <Filter>Source Files\World\Renderer\Entity</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1969,6 +1972,9 @@
     </ClInclude>
     <ClInclude Include="..\platforms\windows\SoundBufferReleaseHack.h">
       <Filter>Header Files\App</Filter>
+	</ClInclude>
+    <ClInclude Include="..\source\World\Renderer\ItemSpriteRenderer.hpp">
+      <Filter>Header Files\World\Renderer\Entity</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

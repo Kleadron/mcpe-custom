@@ -13,6 +13,8 @@
 #include <shlobj_core.h>
 #endif
 
+#ifndef DEMO
+
 ExternalFileLevelStorageSource::ExternalFileLevelStorageSource(const std::string& path)
 {
 	m_worldsPath = path;
@@ -189,3 +191,5 @@ void ExternalFileLevelStorageSource::addLevelSummaryIfExists(std::vector<LevelSu
 	ls.field_34 = ld.field_18;
 	vls.push_back(ls);
 }
+
+#endif
