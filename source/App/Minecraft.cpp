@@ -23,6 +23,7 @@
 // note: Nothing changes these, so it'll think we're always running at 854x480 even if not
 int Minecraft::width  = C_DEFAULT_SCREEN_WIDTH;
 int Minecraft::height = C_DEFAULT_SCREEN_HEIGHT;
+bool Minecraft::windowSizeChanged = false;
 bool Minecraft::useAmbientOcclusion = false;
 int Minecraft::customDebugId = 0;
 
@@ -300,6 +301,14 @@ void Minecraft::tickInput()
 {
 	if (field_D14)
 	{
+#ifndef ORIGINAL_CODE
+		if (windowSizeChanged)
+		{
+			field_D14->setSize(int(width * Gui::InvGuiScale), int(height * Gui::InvGuiScale));
+			windowSizeChanged = false;
+		}
+#endif 
+
 		if (!field_D14->field_10)
 		{
 			field_DB0 = true;

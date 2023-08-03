@@ -194,6 +194,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 
 			Minecraft::width  = width;
 			Minecraft::height = height;
+#ifndef ORIGINAL_CODE
+			Minecraft::windowSizeChanged = true;
+#endif
 
 			g_AppPlatform.setScreenSize(width, height);
 
