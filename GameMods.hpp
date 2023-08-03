@@ -39,6 +39,7 @@
 #define MOD_DISABLE_AUTOJUMP       // Disable Autojump, like old Java edition
 #define MOD_JAVA_STARTING_BLOCKS   // Replace the starting hotbar with the items from the Java b1.8 Creative mode starting hotbar
 //#define MOD_EXTRA_BLOCKS           // Adds extra unused blocks from the terrain.png file
+
 // Tweaks
 #define GFX_USE_QUADS		// Use for unsubstantial memory savings I guess (5-10 mb). Might add overhead.
 
