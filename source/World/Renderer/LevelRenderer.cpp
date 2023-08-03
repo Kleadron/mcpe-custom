@@ -1035,9 +1035,8 @@ void LevelRenderer::takePicture(TripodCamera* pCamera, Entity* pOwner)
 #ifdef ORIGINAL_CODE
 	sprintf(str, "%s/games/com.mojang/img_%.4d.jpg", m_pMinecraft->m_externalStorageDir.c_str(), getTimeMs());
 #else
-	FILETIME filetime;
-	GetSystemTimeAsFileTime(&filetime);
-	sprintf(str, "img_%i_%i.png", filetime.dwHighDateTime, filetime.dwLowDateTime);
+	// use epoch time instead
+	sprintf(str, "img_%lli.png", getEpochTimeS());
 #endif
 
 	m_pMinecraft->platform()->saveScreenshot(std::string(str), Minecraft::width, Minecraft::height);
