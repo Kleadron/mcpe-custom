@@ -114,7 +114,11 @@ void RenderList::renderChunks()
 			glVertexPointer  (3, GL_FLOAT,         sizeof(Tesselator::Vertex), (void*)offsetof(Tesselator::Vertex, m_x));
 			glTexCoordPointer(2, GL_FLOAT,         sizeof(Tesselator::Vertex), (void*)offsetof(Tesselator::Vertex, m_u));
 			glColorPointer   (4, GL_UNSIGNED_BYTE, sizeof(Tesselator::Vertex), (void*)offsetof(Tesselator::Vertex, m_color));
+#ifdef GFX_USE_QUADS
+			glDrawArrays(GL_QUADS, 0, chk.field_4);
+#else
 			glDrawArrays(GL_TRIANGLES, 0, chk.field_4);
+#endif
 
 			glPopMatrix();
 		}
