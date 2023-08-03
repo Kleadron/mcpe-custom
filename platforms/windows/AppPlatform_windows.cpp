@@ -68,7 +68,7 @@ void AppPlatform_windows::saveScreenshot(const std::string& fileName, int width,
 	if (error == ERROR_PATH_NOT_FOUND || error == ERROR_FILE_NOT_FOUND || error == ERROR_INVALID_NAME)
 	{
 		// https://stackoverflow.com/a/22182041
-		CreateDirectory(str, NULL);
+		SHCreateDirectoryEx(NULL, str, NULL);
 	}
 	
 	char fullpath[MAX_PATH];
@@ -181,7 +181,32 @@ std::vector<std::string> AppPlatform_windows::getOptionStrings()
 	//o.push_back("mp_username");
 	//o.push_back("iProgramInCpp");
 
+//#if _WIN32
+//	CHAR appdatapath[MAX_PATH];
+//	HRESULT result = SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, SHGFP_TYPE_CURRENT, appdatapath);
+//
+//	static char path[MAX_PATH];
+//
+//	if (result == S_OK)
+//		sprintf(path, "%s\\%s", appdatapath, "MCPE\\games\\com.mojang\\minecraftpe");
+//	else
+//		sprintf(path, "%s\\%s", ".", "games\\com.mojang\\minecraftpe");
+//
+//	// https://stackoverflow.com/a/8233867
+//	DWORD ftyp = GetFileAttributesA(path);
+//
+//	DWORD error = GetLastError();
+//	if (error == ERROR_PATH_NOT_FOUND || error == ERROR_FILE_NOT_FOUND || error == ERROR_INVALID_NAME)
+//	{
+//		// https://stackoverflow.com/a/22182041
+//		SHCreateDirectoryEx(NULL, path, NULL);
+//	}
+//
+//	std::ifstream ifs(path);
+//#else
 	std::ifstream ifs("options.txt");
+//#endif
+
 	if (!ifs.is_open())
 		return o;
 
