@@ -140,7 +140,7 @@ void StartMenuScreen::init()
 	field_154 = "\xFFMojang AB";
 	field_16C = m_width - 1 - m_pFont->width(field_154);
 
-	field_170 = "v0.1.0 alpha"
+	field_170 = "v0.1.0 alpha (Custom Edition)"
 #ifdef DEMO
 		" (Demo)"
 #endif
