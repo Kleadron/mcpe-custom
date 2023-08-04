@@ -133,10 +133,11 @@ void Gui::render(float f, bool bHaveScreen, int mouseX, int mouseY)
 
 	// hotbar
 	int cenX = width / 2;
-	blit(cenX - 182 / 2, height - 22, 0, 0, 182, 22, 0, 0);
+
+	blit(cenX - 182 / 2, height - 24, 0, 0, 182, 22, 0, 0);
 
 	// selection mark
-	blit(cenX - 92 + 20 * pInventory->m_SelectedHotbarSlot, height - 23, 0, 22, 24, 22, 0, 0);
+	blit(cenX - 92 + 20 * pInventory->m_SelectedHotbarSlot, height - 25, 0, 22, 24, 24, 0, 0);
 
 	m->m_pTextures->loadAndBindTexture("gui/icons.png");
 
@@ -232,7 +233,7 @@ void Gui::render(float f, bool bHaveScreen, int mouseX, int mouseY)
 		}
 	}
 
-	m->m_pTextures->loadAndBindTexture("gui/gui_blocks.png");
+	//m->m_pTextures->loadAndBindTexture("gui/gui_blocks.png");
 
 	Tesselator& t = Tesselator::instance;
 	t.begin();
@@ -250,7 +251,7 @@ void Gui::render(float f, bool bHaveScreen, int mouseX, int mouseY)
 #endif
 	for (int i = 0; i < C_MAX_HOTBAR_ITEMS - HOTBAR_DIFF; i++)
 	{
-		renderSlot(i, slotX, height - 19, f);
+		renderSlot(i, slotX, height - 21, f);
 
 		slotX += 20;
 	}
