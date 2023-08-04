@@ -236,7 +236,7 @@ label_3:
 				return;
 			}
 
-			ItemInstance item(m_pLocalPlayer->m_pInventory->getSelectedItemId(), 999, 0);
+			ItemInstance item(m_pLocalPlayer->m_pInventory->getSelectedItemId(), 999, m_pLocalPlayer->m_pInventory->getSelectedItemAux());
 			if (m_pGameMode->useItemOn(m_pLocalPlayer, m_pLevel, item.m_itemID < 0 ? nullptr : &item, hr.m_tileX, hr.m_tileY, hr.m_tileZ, hr.m_hitSide))
 			{
 				m_pLocalPlayer->swing();
@@ -262,7 +262,7 @@ label_3:
 					}
 				}
 
-				m_pRakNetInstance->send(new PlaceBlockPacket(m_pLocalPlayer->m_EntityID, dx, dy, dz, uint8_t(item.m_itemID), uint8_t(hr.m_hitSide)));
+				m_pRakNetInstance->send(new PlaceBlockPacket(m_pLocalPlayer->m_EntityID, dx, dy, dz, uint8_t(item.m_itemID), uint8_t(hr.m_hitSide), uint8_t(item.m_auxValue)));
 				return;
 			}
 		}
@@ -289,7 +289,7 @@ label_3:
 			int id = m_pLocalPlayer->m_pInventory->getSelectedItemId();
 			if (id >= 0)
 			{
-				ItemInstance item(m_pLocalPlayer->m_pInventory->getSelectedItemId(), 999, 0);
+				ItemInstance item(id, 999, m_pLocalPlayer->m_pInventory->getSelectedItemAux());
 				if (m_pGameMode->useItem(m_pLocalPlayer, m_pLevel, &item))
 					m_pGameRenderer->m_pItemInHandRenderer->itemUsed();
 			}
