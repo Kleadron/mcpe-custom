@@ -22,6 +22,7 @@ void PlaceBlockPacket::write(RakNet::BitStream* bs)
 	bs->Write(m_y);
 	bs->Write(m_tile);
 	bs->Write(m_face);
+	bs->Write(m_data);
 }
 
 void PlaceBlockPacket::read(RakNet::BitStream* bs)
@@ -32,4 +33,5 @@ void PlaceBlockPacket::read(RakNet::BitStream* bs)
 	bs->Read(m_y);
 	bs->Read(m_tile);
 	bs->Read(m_face);
+	bs->Read(m_data);
 }

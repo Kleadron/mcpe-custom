@@ -639,6 +639,7 @@ void Tile::initTiles()
 		->setDescriptionId("stoneMoss");
 		
 	// custom additions here
+#ifdef MOD_EXTRA_BLOCKS
 	Tile::spawner = (new SpawnerTile(TILE_SPAWNER, TEXTURE_SPAWNER, Material::stone)) // ID: 52
 		->init()
 		->setDestroyTime(0.6f)
@@ -679,6 +680,13 @@ void Tile::initTiles()
 		->setExplodeable(0.3f)
 		->setSoundType(Tile::SOUND_GLASS)
 		->setDescriptionId("glowStone");
+
+	Tile::cobweb = (new Bush(TILE_COBWEB, TEXTURE_COBWEB))
+		->init()
+		->setDestroyTime(4.0f)
+		->setExplodeable(4.0f)
+		->setSoundType(Tile::SOUND_STONE)
+		->setDescriptionId("cobweb");
 #endif
 
 	for (int i = 0; i < C_MAX_TILES; i++)
@@ -1286,6 +1294,7 @@ Tile
 	*Tile::emeraldBlock, //! actually diamond block
 	*Tile::stairs_wood,
 	*Tile::stairs_stone,
+	*Tile::door_wood,
 	*Tile::door_iron,
 	*Tile::sapling,     // ID: 6
 	*Tile::sponge,      // ID: 19

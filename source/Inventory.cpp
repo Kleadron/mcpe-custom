@@ -1,6 +1,44 @@
 #include "Inventory.hpp"
 #include "Item.hpp"
 
+// lower 16 bits are used for the ID and higher 8 are used for the Aux
+#define MAKE_AUX(id) ((id << 16) & 0x000F0000)
+#define GET_AUX(id) ((id & 0x000F0000) >> 16)
+#define GET_ID(id) (id & 0xFFF0FFFF)
+
+//int makeAux(int aux)
+//{
+//	return (aux & 0xF) << 16;
+//}
+//
+//int getAux(int combo)
+//{
+//	int id = combo & 0xFF00FFFF;
+//	int aux = combo & 0xF0000;
+//
+//	if (id <= -1)
+//		return 0;
+//
+//	if (combo & 0xF0000 == 0)
+//		return 0;
+//	
+//	combo = combo & 0xF0000;
+//	combo = combo >> 16;
+//
+//	return combo;
+//}
+//
+//int getID(int combo)
+//{
+//	if (combo <= -1)
+//		return 0;
+//
+//	combo = combo & 0x0F00;
+//	combo = combo >> 16;
+//
+//	return combo;
+//}
+
 #ifdef DEMO
 
 static void MoveItemToSlot(int* pItems, int item, int index)
@@ -196,8 +234,8 @@ Inventory::Inventory(Player* pPlayer)
 	m_items[20] = Tile::soulSand->m_ID;
 	m_items[21] = Tile::treeTrunk->m_ID;
 
-	m_items[22] = Tile::treeTrunk->m_ID; //spruce
-	m_items[23] = Tile::treeTrunk->m_ID; //birch
+	m_items[22] = Tile::treeTrunk->m_ID + MAKE_AUX(1); //spruce
+	m_items[23] = Tile::treeTrunk->m_ID + MAKE_AUX(2); //birch
 
 	m_items[24] = Tile::leaves->m_ID;
 	m_items[25] = Tile::dirt->m_ID;
@@ -217,16 +255,16 @@ Inventory::Inventory(Player* pPlayer)
 	m_items[39] = Tile::mushroom2->m_ID;
 	m_items[40] = Tile::reeds->m_ID;
 	m_items[41] = Tile::cactus->m_ID;
-	m_items[42] = Tile::rock->m_ID; //pumpkin
-	m_items[43] = Tile::rock->m_ID; //jack o lanturn
-	m_items[44] = Tile::rock->m_ID; //chest
-	m_items[45] = Tile::rock->m_ID; //crafting table
+	//m_items[42] = Tile::rock->m_ID; //pumpkin
+	//m_items[43] = Tile::rock->m_ID; //jack o lanturn
+	//m_items[44] = Tile::rock->m_ID; //chest
+	//m_items[45] = Tile::rock->m_ID; //crafting table
 	m_items[46] = Tile::glass->m_ID;
 	m_items[47] = Tile::tnt->m_ID;
-	m_items[48] = Tile::rock->m_ID; //bookshelf
-	m_items[49] = Tile::rock->m_ID; //white wool
-	m_items[50] = Tile::rock->m_ID; //orange wool
-	m_items[51] = Tile::rock->m_ID; //magenta wool
+	m_items[48] = Tile::bookshelf->m_ID; //bookshelf
+	m_items[49] = Tile::cloth->m_ID; //white wool
+	//m_items[50] = Tile::rock->m_ID; //orange wool
+	//m_items[51] = Tile::rock->m_ID; //magenta wool
 
 	m_items[52] = Tile::cloth_41->m_ID; // Light Blue Wool
 	m_items[53] = Tile::cloth_31->m_ID; // Yellow Wool
@@ -240,20 +278,20 @@ Inventory::Inventory(Player* pPlayer)
 	m_items[61] = Tile::cloth_30->m_ID; // Brown Wool
 	m_items[62] = Tile::cloth_20->m_ID; // Green Wool
 	m_items[63] = Tile::cloth_10->m_ID; // Red Wool
-	m_items[64] = Tile::rock->m_ID; //black wool
+	//m_items[64] = Tile::rock->m_ID; //black wool
 
-	m_items[65] = Tile::rock->m_ID; //dispenser
-	m_items[66] = Tile::rock->m_ID; //furnace
-	m_items[67] = Tile::rock->m_ID; //note block
-	m_items[68] = Tile::rock->m_ID; //jukebox
+	//m_items[65] = Tile::rock->m_ID; //dispenser
+	//m_items[66] = Tile::rock->m_ID; //furnace
+	//m_items[67] = Tile::rock->m_ID; //note block
+	//m_items[68] = Tile::rock->m_ID; //jukebox
 	m_items[69] = Tile::ladder->m_ID;
-	m_items[70] = Tile::rock->m_ID; //rail
+	//m_items[70] = Tile::rock->m_ID; //rail
 	m_items[71] = Tile::torch->m_ID; 
 	m_items[72] = Tile::stairs_wood->m_ID;
 	m_items[73] = Tile::stairs_stone->m_ID;
-	m_items[74] = Tile::rock->m_ID; //lever
-	m_items[75] = Tile::rock->m_ID; //redstone torch
-	m_items[76] = Tile::rock->m_ID; //cake
+	//m_items[74] = Tile::rock->m_ID; //lever
+	//m_items[75] = Tile::rock->m_ID; //redstone torch
+	//m_items[76] = Tile::rock->m_ID; //cake
 	m_items[77] = Item::door_wood->m_itemID;
 	m_items[78] = Tile::water->m_ID;
 	m_items[79] = Tile::lava->m_ID;
@@ -267,8 +305,8 @@ Inventory::Inventory(Player* pPlayer)
 	m_items[85] = Item::door_iron->m_itemID; //redstone repeater
 	m_items[86] = Item::camera->m_itemID;
 	m_items[87] = Tile::spawner->m_ID;
-	m_items[88] = Tile::rock->m_ID; //lit furnace
-	m_items[89] = Tile::rock->m_ID; //double stone slab
+	//m_items[88] = Tile::rock->m_ID; //lit furnace
+	m_items[89] = Tile::stoneSlab->m_ID; //double stone slab
 #endif
 }
 
@@ -286,6 +324,28 @@ int Inventory::getSelectionSize()
 int Inventory::getSelectionSlotItemId(int slot)
 {
 	if (slot >= 0 && slot < C_MAX_HOTBAR_ITEMS - HOTBAR_DIFF)
+		return GET_ID(m_hotbar[slot]);
+
+	if (slot > C_MAX_HOTBAR_ITEMS + C_MAX_INVENTORY_ITEMS - 1 || slot < 0)
+		return -1;
+
+	return GET_ID(m_items[slot - C_MAX_HOTBAR_ITEMS]);
+}
+
+int Inventory::getSelectionSlotItemAux(int slot)
+{
+	if (slot >= 0 && slot < C_MAX_HOTBAR_ITEMS - HOTBAR_DIFF)
+		return GET_AUX(m_hotbar[slot]);
+
+	if (slot > C_MAX_HOTBAR_ITEMS + C_MAX_INVENTORY_ITEMS - 1 || slot < 0)
+		return -1;
+
+	return GET_AUX(m_items[slot - C_MAX_HOTBAR_ITEMS]);
+}
+
+int Inventory::getSelectionSlotCombo(int slot)
+{
+	if (slot >= 0 && slot < C_MAX_HOTBAR_ITEMS - HOTBAR_DIFF)
 		return m_hotbar[slot];
 
 	if (slot > C_MAX_HOTBAR_ITEMS + C_MAX_INVENTORY_ITEMS - 1 || slot < 0)
@@ -294,15 +354,26 @@ int Inventory::getSelectionSlotItemId(int slot)
 	return m_items[slot - C_MAX_HOTBAR_ITEMS];
 }
 
-void Inventory::setSelectionSlotItemId(int slotNo, int item)
+void Inventory::setSelectionSlotItemId(int slotNo, int item, int aux)
 {
 	if (slotNo >= 0 && slotNo < C_MAX_HOTBAR_ITEMS - HOTBAR_DIFF)
-		m_hotbar[slotNo] = item;
+		m_hotbar[slotNo] = item + MAKE_AUX(aux);
+}
+
+void Inventory::setSelectionSlotCombo(int slotNo, int combo)
+{
+	if (slotNo >= 0 && slotNo < C_MAX_HOTBAR_ITEMS - HOTBAR_DIFF)
+		m_hotbar[slotNo] = combo;
 }
 
 int Inventory::getSelectedItemId()
 {
 	return getSelectionSlotItemId(m_SelectedHotbarSlot);
+}
+
+int Inventory::getSelectedItemAux()
+{
+	return getSelectionSlotItemAux(m_SelectedHotbarSlot);
 }
 
 void Inventory::selectSlot(int slotNo)

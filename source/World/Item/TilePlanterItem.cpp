@@ -15,6 +15,12 @@ TilePlanterItem::TilePlanterItem(int id, int place) : Item(id)
 	m_tile = Tile::tiles[place]->m_ID;
 }
 
+TilePlanterItem::TilePlanterItem(int id, int place, int data) : Item(id)
+{
+	m_tile = Tile::tiles[place]->m_ID;
+	m_data = data;
+}
+
 bool TilePlanterItem::useOn(ItemInstance* instance, Player* player, Level* level, int x, int y, int z, int dir)
 {
 	if (level->getTile(x, y, z) == Tile::topSnow->m_ID)
@@ -38,7 +44,7 @@ bool TilePlanterItem::useOn(ItemInstance* instance, Player* player, Level* level
 	if (!level->mayPlace(m_tile, x, y, z, false))
 		return true;
 
-	if (!level->setTile(x, y, z, m_tile))
+	if (!level->setTileAndData(x, y, z, m_tile, m_data))
 		return true;
 
 	Tile::tiles[m_tile]->setPlacedOnFace(level, x, y, z, dir);

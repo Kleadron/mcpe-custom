@@ -229,7 +229,7 @@ int Item::getMaxStackSize()
 
 int Item::getLevelDataForAuxValue(int x)
 {
-	return 0;
+	return x;
 }
 
 bool Item::isStackedByData()

@@ -136,11 +136,12 @@ void ServerSideNetworkHandler::handle(const RakNet::RakNetGUID& guid, PlaceBlock
 	int x = packet->m_x;
 	int y = packet->m_y;
 	int z = packet->m_z;
+	int data = packet->m_data;
 
 	if (!m_pLevel->mayPlace(tile, x, y, z, true))
 		return;
 
-	if (m_pLevel->setTile(x, y, z, tile))
+	if (m_pLevel->setTileAndData(x, y, z, tile, data))
 	{
 		Tile::tiles[tile]->setPlacedOnFace(m_pLevel, x, y, z, face);
 		Tile::tiles[tile]->setPlacedBy(m_pLevel, x, y, z, pMob);
@@ -200,7 +201,7 @@ void ServerSideNetworkHandler::handle(const RakNet::RakNetGUID& guid, PlayerEqui
 		return;
 	}
 
-	pPlayer->m_pInventory->setSelectionSlotItemId(0, packet->m_itemID);
+	pPlayer->m_pInventory->setSelectionSlotItemId(0, packet->m_itemID, 0);
 	pPlayer->m_pInventory->selectSlot(0);
 
 	redistributePacket(packet, guid);

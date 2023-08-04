@@ -302,6 +302,7 @@ void ItemInHandRenderer::tick()
 		a  = 0.4f;
 
 	m_ItemInstance.m_itemID = itemID;
+	m_ItemInstance.m_auxValue = m_pMinecraft->m_pLocalPlayer->m_pInventory->getSelectedItemAux();
 
 	field_1C += a;
 }

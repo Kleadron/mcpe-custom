@@ -319,7 +319,7 @@ void Gui::renderSlot(int slot, int x, int y, float f)
 	if (itemID < 0)
 		return;
 
-	ItemInstance inst(Item::items[itemID], 1, 0);
+	ItemInstance inst(Item::items[itemID], 1, m_pMinecraft->m_pLocalPlayer->m_pInventory->getSelectionSlotItemAux(slot));
 	ItemRenderer::renderGuiItem(m_pMinecraft->m_pFont, m_pMinecraft->m_pTextures, &inst, x, y, true);
 }
 

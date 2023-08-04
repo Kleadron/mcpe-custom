@@ -18,6 +18,7 @@ LocalPlayer::LocalPlayer(Minecraft* pMinecraft, Level* pLevel, User* pUser, int 
 
 	field_BC4 = i;
 	field_C38 = m_pInventory->getSelectedItemId();
+	// something aux should go here
 }
 
 LocalPlayer::~LocalPlayer()

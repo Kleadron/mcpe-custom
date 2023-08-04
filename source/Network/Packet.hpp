@@ -140,7 +140,7 @@ class PlaceBlockPacket : public Packet
 {
 public:
 	PlaceBlockPacket() {}
-	PlaceBlockPacket(int playerID, int x, uint8_t y, int z, uint8_t tile, uint8_t face)
+	PlaceBlockPacket(int playerID, int x, uint8_t y, int z, uint8_t tile, uint8_t face, uint8_t aux)
 	{
 		m_playerID = playerID;
 		m_x = x;
@@ -148,6 +148,7 @@ public:
 		m_z = z;
 		m_tile = tile;
 		m_face = face;
+		m_data = aux;
 	}
 
 	void handle(const RakNet::RakNetGUID&, NetEventCallback* pCallback) override;
@@ -160,6 +161,7 @@ public:
 	uint8_t m_y;
 	uint8_t m_tile;
 	uint8_t m_face;
+	uint8_t m_data;
 };
 
 class RemoveBlockPacket : public Packet
