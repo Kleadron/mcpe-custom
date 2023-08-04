@@ -21,6 +21,7 @@ enum eOptionsButton
 	OB_VIEW_BOB,
 	OB_VIEW_DIST,
 	OB_FLY_HAX,
+	OB_AUTO_JUMP,
 };
 
 OptionsScreen::OptionsScreen()
@@ -33,7 +34,8 @@ OptionsScreen::OptionsScreen()
 	m_anaglyphsButton(6, 0, 0, 150, 20, ""),
 	m_viewBobButton  (7, 0, 0, 150, 20, ""),
 	m_viewDistButton (8, 0, 0, 150, 20, ""),
-	m_flightHaxButton(9, 0, 0, 150, 20, "")
+	m_flightHaxButton(9, 0, 0, 150, 20, ""),
+	m_autoJumpButton (10, 0, 0, 150, 20, "")
 #endif
 {
 }
@@ -72,6 +74,7 @@ void OptionsScreen::UpdateTexts()
 	m_fancyGfxButton.field_18  = "Fancy graphics: "  + BoolOptionStr(o.m_bFancyGraphics);
 	m_flightHaxButton.field_18 = "Flight hax: "      + BoolOptionStr(o.m_bFlyCheat);
 	m_viewDistButton.field_18  = "View distance: "   + ViewDistanceStr(o.field_10);
+	m_autoJumpButton.field_18  = "Auto jump: " + BoolOptionStr(o.m_bAutoJump);
 	m_srvVisButton.field_18    = "Server " + std::string(o.m_bServerVisibleDefault ? "visible" : "invisible") + " by default";
 }
 #endif
@@ -95,13 +98,15 @@ void OptionsScreen::init()
 	m_invertYButton.m_xPos   =
 	m_anaglyphsButton.m_xPos =
 	m_viewBobButton.m_xPos   = 
-	m_flightHaxButton.m_xPos = m_width / 2 + 5;
+	m_flightHaxButton.m_xPos =
+	m_autoJumpButton.m_xPos  = m_width / 2 + 5;
 
 	int yPos = 40;
 	m_AOButton.m_yPos       = m_invertYButton.m_yPos   = yPos; yPos += 25;
 	m_srvVisButton.m_yPos   = m_anaglyphsButton.m_yPos = yPos; yPos += 25;
 	m_fancyGfxButton.m_yPos = m_viewBobButton.m_yPos   = yPos; yPos += 25;
 	m_viewDistButton.m_yPos = m_flightHaxButton.m_yPos = yPos; yPos += 25;
+	m_autoJumpButton.m_yPos = m_autoJumpButton.m_yPos  = yPos; yPos += 25;
 
 	m_buttons.push_back(&m_AOButton);
 	m_buttons.push_back(&m_srvVisButton);
@@ -111,6 +116,7 @@ void OptionsScreen::init()
 	m_buttons.push_back(&m_viewBobButton);
 	m_buttons.push_back(&m_viewDistButton);
 	m_buttons.push_back(&m_flightHaxButton);
+	m_buttons.push_back(&m_autoJumpButton);
 
 	m_buttonTabList.push_back(&m_AOButton);
 	m_buttonTabList.push_back(&m_srvVisButton);
@@ -120,6 +126,7 @@ void OptionsScreen::init()
 	m_buttonTabList.push_back(&m_anaglyphsButton);
 	m_buttonTabList.push_back(&m_viewBobButton);
 	m_buttonTabList.push_back(&m_flightHaxButton);
+	m_buttonTabList.push_back(&m_autoJumpButton);
 
 	m_buttonTabList.push_back(&m_BackButton);
 
@@ -197,6 +204,9 @@ void OptionsScreen::buttonClicked(Button* pButton)
 			break;
 		case OB_FLY_HAX:
 			pOption = &o.m_bFlyCheat;
+			break;
+		case OB_AUTO_JUMP:
+			pOption = &o.m_bAutoJump;
 			break;
 	}
 

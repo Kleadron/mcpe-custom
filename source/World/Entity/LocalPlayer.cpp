@@ -128,10 +128,13 @@ int LocalPlayer::move(float x, float y, float z)
 
 		// autojump stuff
 #ifndef MOD_DISABLE_AUTOJUMP
+		if (m_pMinecraft->m_options.m_bAutoJump)
+		{
 		if (m_nAutoJumpFrames > 0)
 		{
 			m_nAutoJumpFrames--;
 			m_pKeyboardInput->m_bJumpButton = true;
+		}
 		}
 #endif
 
@@ -144,6 +147,8 @@ int LocalPlayer::move(float x, float y, float z)
 		float posZ = m_pos.z;
 
 #ifndef MOD_DISABLE_AUTOJUMP
+		if (m_pMinecraft->m_options.m_bAutoJump)
+		{
 		if (m_nAutoJumpFrames <= 0)
 		{
 			if (Mth::floor(posX * 2) == Mth::floor(m_pos.x * 2) &&
@@ -173,6 +178,7 @@ int LocalPlayer::move(float x, float y, float z)
 			if (tileOnTop != Tile::stairs_stone->m_ID && tileOnTop != Tile::stairs_wood->m_ID && tileOnTop != Tile::stoneSlabHalf->m_ID)
 			// Nope, we're walking towards a full block. Trigger an auto jump.
 				m_nAutoJumpFrames = 1;
+		}
 		}
 #endif
 	}
@@ -217,7 +223,10 @@ void LocalPlayer::updateAi()
 	field_B04 = m_pKeyboardInput->m_vertInput;
 	
 #ifndef MOD_DISABLE_AUTOJUMP
+	if (m_pMinecraft->m_options.m_bAutoJump)
+	{
 	field_B0C = m_pKeyboardInput->m_bJumpButton || m_nAutoJumpFrames > 0;
+	}
 #else
 	field_B0C = m_pKeyboardInput->m_bJumpButton;
 #endif

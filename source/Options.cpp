@@ -41,7 +41,8 @@ void Options::initDefaultValues()
 	field_24C = 0;
 	m_bInvertMouse = false;
 	m_bAnaglyphs = false;
-	field_16  = 0;
+	field_16 = 0;
+	m_bAutoJump = true;
 #ifdef ORIGINAL_CODE
 	field_18  = 0;
 #else
