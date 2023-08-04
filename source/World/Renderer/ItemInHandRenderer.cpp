@@ -88,8 +88,14 @@ void ItemInHandRenderer::renderItem(ItemInstance* inst)
 	constexpr float C_RATIO_2   = 1.0f / 512.0f;
 	constexpr float C_ONE_PIXEL = 1.0f / 16.0f;
 
-	int textureX = inst->getIcon() % 16 * 16;
-	int textureY = inst->getIcon() / 16 * 16;
+	int icon = inst->getIcon();
+	if (inst->m_itemID <= 255)
+	{
+		icon = Tile::tiles[inst->m_itemID]->getTexture(DIR_ZNEG, inst->getAuxValue());
+	}
+
+	int textureX = icon % 16 * 16;
+	int textureY = icon / 16 * 16;
 
 	float texU_1 = C_RATIO * float(textureX + 0.0f);
 	float texU_2 = C_RATIO * float(textureX + 15.99f);

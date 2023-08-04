@@ -103,6 +103,10 @@ void ItemRenderer::render(Entity* pEntity, float x, float y, float z, float a, f
 	{
 		glScalef(0.5f, 0.5f, 0.5f);
 		int icon = pItemInstance->getIcon();
+		if (itemID <= 255)
+		{
+			icon = Tile::tiles[itemID]->getTexture(DIR_ZNEG, pItemInstance->getAuxValue());
+		}
 
 		bindTexture(pItemInstance->m_itemID < C_MAX_TILES ? C_TERRAIN_NAME : C_ITEMS_NAME);
 
@@ -257,7 +261,14 @@ void ItemRenderer::renderGuiItem(Font* font, Textures* textures, ItemInstance* i
 			else
 				textures->loadAndBindTexture(C_ITEMS_NAME);
 
-			blit(x, y, 16 * (instance->getIcon() % 16), 16 * (instance->getIcon() / 16), 16, 16);
+			// blarg, bad, but don't care. need sapling to render
+			int icon = instance->getIcon();
+			if (itemID <= 255)
+			{
+				icon = Tile::tiles[itemID]->getTexture(DIR_ZNEG, instance->getAuxValue());
+			}
+
+			blit(x, y, 16 * (icon % 16), 16 * (icon / 16), 16, 16);
 		}
 	}
 }

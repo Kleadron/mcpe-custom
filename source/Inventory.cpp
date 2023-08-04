@@ -231,9 +231,14 @@ Inventory::Inventory(Player* pPlayer)
 	m_items[s++] = Tile::mossStone->m_ID;
 	m_items[s++] = Tile::stoneSlabHalf->m_ID;
 	m_items[s++] = Tile::obsidian->m_ID;
-	m_items[s++] = Tile::netherrack->m_ID;
+	/*m_items[s++] = Tile::netherrack->m_ID;
 	m_items[s++] = Tile::glowStone->m_ID;
-	m_items[s++] = Tile::soulSand->m_ID;
+	m_items[s++] = Tile::soulSand->m_ID;*/
+
+	// oak spruce and birch saplings
+	m_items[s++] = Tile::sapling->m_ID;
+	m_items[s++] = Tile::sapling->m_ID + MAKE_AUX(1);
+	m_items[s++] = Tile::sapling->m_ID + MAKE_AUX(2);
 
 	// oak spruce and birch logs
 	m_items[s++] = Tile::treeTrunk->m_ID;
@@ -257,7 +262,7 @@ Inventory::Inventory(Player* pPlayer)
 	m_items[s++] = Tile::gravel->m_ID;
 	m_items[s++] = Tile::cobweb->m_ID;
 	m_items[s++] = Tile::wood->m_ID;
-	m_items[s++] = Tile::sapling->m_ID;
+
 	m_items[s++] = Tile::sponge->m_ID;
 	m_items[s++] = Tile::ice->m_ID;
 	m_items[s++] = Tile::snow->m_ID;

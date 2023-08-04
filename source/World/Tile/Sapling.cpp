@@ -7,6 +7,12 @@ Sapling::Sapling(int id, int texture) : Bush(id, texture)
 
 int Sapling::getTexture(int dir, int data)
 {
+	// hehe hardcode :)
+	if ((data & 7) == 1)
+		return TEXTURE_SAPLING + (16 * 3);
+	if ((data & 7) == 2)
+		return TEXTURE_SAPLING + (16 * 4);
+
 	return TEXTURE_SAPLING; // we don't have the other saplings' textures...
 }
 
@@ -34,14 +40,14 @@ bool Sapling::maybeGrowTree(Level* level, int x, int y, int z, Random* random)
 
 	Feature* pFeature = &treeFeature;
 
-	int data = level->getData(x, y, z);
+	int data = level->getData(x, y, z) & 7;
 	switch (data)
 	{
 		case 1:
-			pFeature = &birchFeature;
+			pFeature = &spruceFeature;
 			break;
 		case 2:
-			pFeature = &spruceFeature;
+			pFeature = &birchFeature;
 			break;
 	}
 
