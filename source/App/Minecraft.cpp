@@ -227,11 +227,18 @@ label_3:
 				{
 					// @BUG: This is only done on the client side.
 					m_pLevel->extinguishFire(hr.m_tileX, hr.m_tileY, hr.m_tileZ, hr.m_hitSide);
-
-					if (pTile != Tile::unbreakable || m_pLocalPlayer->field_B94 > 99 && !hr.m_bUnk24)
+#ifdef ENH_INSTA_BREAK
+					if ((pTile != Tile::invisible_bedrock) || m_pLocalPlayer->field_B94 > 99 && !hr.m_bUnk24)
 					{
 						m_pGameMode->startDestroyBlock(hr.m_tileX, hr.m_tileY, hr.m_tileZ, hr.m_hitSide);
 					}
+#else
+					if ((pTile != Tile::unbreakable && pTile != Tile::invisible_bedrock) || m_pLocalPlayer->field_B94 > 99 && !hr.m_bUnk24)
+					{
+						m_pGameMode->startDestroyBlock(hr.m_tileX, hr.m_tileY, hr.m_tileZ, hr.m_hitSide);
+					}
+#endif
+					
 				}
 				return;
 			}
