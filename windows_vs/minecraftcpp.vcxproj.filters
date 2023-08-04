@@ -1085,7 +1085,7 @@
     </ClCompile>
     <ClCompile Include="..\platforms\windows\SoundBufferReleaseHack.c">
       <Filter>Source Files\App</Filter>
-	</ClInclude>
+	</ClCompile>
     <ClCompile Include="..\source\World\Renderer\ItemSpriteRenderer.cpp">
       <Filter>Source Files\World\Renderer\Entity</Filter>
     </ClCompile>
