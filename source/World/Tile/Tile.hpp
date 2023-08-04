@@ -154,21 +154,21 @@ public: // static variables
 		* stoneSlab,
 		* stoneSlabHalf,
 		* cloth,
-		* cloth_00,
-		* cloth_10,
-		* cloth_20,
-		* cloth_30,
-		* cloth_40,
-		* cloth_50,
-		* cloth_60,
-		* cloth_70,
-		* cloth_01,
-		* cloth_11,
-		* cloth_21,
-		* cloth_31,
-		* cloth_41,
-		* cloth_51,
-		* cloth_61,
+		//* cloth_00,
+		//* cloth_10,
+		//* cloth_20,
+		//* cloth_30,
+		//* cloth_40,
+		//* cloth_50,
+		//* cloth_60,
+		//* cloth_70,
+		//* cloth_01,
+		//* cloth_11,
+		//* cloth_21,
+		//* cloth_31,
+		//* cloth_41,
+		//* cloth_51,
+		//* cloth_61,
 		* flower,
 		* rose,
 		* mushroom1,
@@ -403,7 +403,7 @@ public:
 class ClothTile : public Tile
 {
 public:
-	ClothTile(int id, int type);
+	ClothTile(int id);
 	int getTexture(int dir) override;
 	int getTexture(int dir, int data) override;
 	int getSpawnResourcesAuxValue(int val) override;

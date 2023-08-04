@@ -318,7 +318,7 @@ void Tile::initTiles()
 		->setSoundType(Tile::SOUND_STONE)
 		->setDescriptionId("stoneSlab");
 
-	Tile::cloth = (new ClothTile(TILE_CLOTH, 0xCF))
+	Tile::cloth = (new ClothTile(TILE_CLOTH))
 		->init()
 		->setDestroyTime(0.8f)
 		->setSoundType(Tile::SOUND_CLOTH)
@@ -516,7 +516,7 @@ void Tile::initTiles()
 		->setSoundType(Tile::SOUND_METAL)
 		->setDescriptionId("doorIron");
 
-	Tile::cloth_00 = (new ClothTile(TILE_CLOTH_00, 15))
+	/*Tile::cloth_00 = (new ClothTile(TILE_CLOTH_00, 15))
 		->init()
 		->setDestroyTime(0.8f)
 		->setSoundType(Tile::SOUND_CLOTH)
@@ -604,7 +604,7 @@ void Tile::initTiles()
 		->init()
 		->setDestroyTime(0.8f)
 		->setSoundType(Tile::SOUND_CLOTH)
-		->setDescriptionId("cloth");
+		->setDescriptionId("cloth");*/
 		
 	Tile::sapling = (new Sapling(TILE_SAPLING, TEXTURE_SAPLING))
 		->init()
@@ -1251,21 +1251,21 @@ Tile
 	*Tile::stoneSlab,
 	*Tile::stoneSlabHalf,
 	*Tile::cloth,
-	*Tile::cloth_00,
-	*Tile::cloth_10,
-	*Tile::cloth_20,
-	*Tile::cloth_30,
-	*Tile::cloth_40,
-	*Tile::cloth_50,
-	*Tile::cloth_60,
-	*Tile::cloth_70,
-	*Tile::cloth_01,
-	*Tile::cloth_11,
-	*Tile::cloth_21,
-	*Tile::cloth_31,
-	*Tile::cloth_41,
-	*Tile::cloth_51,
-	*Tile::cloth_61,
+	//*Tile::cloth_00,
+	//*Tile::cloth_10,
+	//*Tile::cloth_20,
+	//*Tile::cloth_30,
+	//*Tile::cloth_40,
+	//*Tile::cloth_50,
+	//*Tile::cloth_60,
+	//*Tile::cloth_70,
+	//*Tile::cloth_01,
+	//*Tile::cloth_11,
+	//*Tile::cloth_21,
+	//*Tile::cloth_31,
+	//*Tile::cloth_41,
+	//*Tile::cloth_51,
+	//*Tile::cloth_61,
 	*Tile::flower,
 	*Tile::rose,
 	*Tile::mushroom1,
