@@ -166,41 +166,43 @@ void IngameBlockSelectionScreen::selectSlotAndClose()
 	Inventory* pInv = m_pMinecraft->m_pLocalPlayer->m_pInventory;
 	int item = pInv->getSelectionSlotItemId(m_selectedSlot + 9);
 	int aux = pInv->getSelectionSlotItemAux(m_selectedSlot + 9);
-	int idx = 0;
+	//int idx = 0;
 
 	// @TODO: Fix gotos
-#ifdef ENH_ENABLE_9TH_SLOT
-#define MAX_ITEMS (C_MAX_HOTBAR_ITEMS - 1)
-#else
-#define MAX_ITEMS (C_MAX_HOTBAR_ITEMS - 2)
-#endif
+//#ifdef ENH_ENABLE_9TH_SLOT
+//#define MAX_ITEMS (C_MAX_HOTBAR_ITEMS - 1)
+//#else
+//#define MAX_ITEMS (C_MAX_HOTBAR_ITEMS - 2)
+//#endif
 
-	if (item == pInv->getSelectionSlotItemId(0) && aux == pInv->getSelectionSlotItemAux(0))
-	{
-	label_4:
-		if (!idx)
-			goto label_5;
-	}
-	else while (++idx != MAX_ITEMS)
-	{
-		if (item == pInv->getSelectionSlotItemId(idx) && aux == pInv->getSelectionSlotItemAux(idx))
-			goto label_4;
-	}
+//	if (item == pInv->getSelectionSlotItemId(0) && aux == pInv->getSelectionSlotItemAux(0))
+//	{
+//	label_4:
+//		if (!idx)
+//			goto label_5;
+//	}
+//	else while (++idx != MAX_ITEMS)
+//	{
+//		if (item == pInv->getSelectionSlotItemId(idx) && aux == pInv->getSelectionSlotItemAux(idx))
+//			goto label_4;
+//	}
+//
+//	while (true)
+//	{
+//		int item = pInv->getSelectionSlotItemId(idx - 1);
+//		int itemaux = pInv->getSelectionSlotItemAux(idx - 1);
+//		pInv->setSelectionSlotItemId(idx, item, itemaux);
+//
+//		if (idx == 1)
+//			break;
+//
+//		--idx;
+//	}
+//label_5:
+//	pInv->setSelectionSlotItemId(0, item, aux);
+//	pInv->selectSlot(0);
 
-	while (true)
-	{
-		int item = pInv->getSelectionSlotItemId(idx - 1);
-		int itemaux = pInv->getSelectionSlotItemAux(idx - 1);
-		pInv->setSelectionSlotItemId(idx, item, itemaux);
-
-		if (idx == 1)
-			break;
-
-		--idx;
-	}
-label_5:
-	pInv->setSelectionSlotItemId(0, item, aux);
-	pInv->selectSlot(0);
+	pInv->setSelectionSlotItemId(pInv->m_SelectedHotbarSlot, item, aux);
 
 	m_pMinecraft->m_pSoundEngine->play("random.click");
 
