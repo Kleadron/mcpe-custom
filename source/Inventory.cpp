@@ -166,14 +166,11 @@ Inventory::Inventory(Player* pPlayer)
 	m_items[37] = Item::camera->m_itemID;
 	m_items[38] = Item::door_wood->m_itemID;
 	m_items[39] = Tile::gravel->m_ID;
-	m_items[40] = Tile::water->m_ID;
-	m_items[41] = Tile::lava->m_ID;
-	m_items[42] = Tile::grass->m_ID;
-	m_items[43] = Tile::cloth->m_ID;
-	m_items[44] = Tile::clay->m_ID;
-	//m_items[45] = Tile::farmland->m_ID;
-	//m_items[46] = Tile::lapisOre->m_ID;
-	//m_items[47] = Item::door_iron->m_itemID;
+	m_items[40] = Tile::cloth->m_ID;
+	m_items[41] = Tile::mossStone->m_ID;
+	m_items[42] = Tile::bookshelf->m_ID;
+	m_items[43] = Tile::sponge->m_ID;
+	m_items[44] = Tile::sapling->m_ID;
 #endif
 #else
 	m_items[0] = Tile::stoneBrick->m_ID;

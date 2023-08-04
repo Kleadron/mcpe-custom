@@ -198,23 +198,21 @@ public: // static variables
 		* stairs_wood,
 		* stairs_stone,
 		* door_wood,
-#ifndef MOD_EXTRA_BLOCKS
-		* door_iron;
-#else
 		* door_iron,
-		// CUSTOM TILES
-		* sapling,     // ID: 6
-		* sponge,      // ID: 19
-		* lapisBlock,  // ID: 22
+		// custom additions here
+		* sapling,
+		* sponge,
+		* lapisBlock,
+		* bookshelf,
+		* mossStone,
+		// extra blocks tiles
 		* cobweb,      // ID: 30
-		* mossStone,   // ID: 48
 		* spawner,     // ID: 52
 		* snow,        // ID: 80
 		* cactus,      // ID: 81
 		* netherrack,  // ID: 87
 		* soulSand,    // ID: 88
 		* glowStone;   // ID: 89
-#endif
 
 public:
 	int m_TextureFrame = 1;
@@ -418,18 +416,29 @@ class Bush : public Tile
 public:
 	Bush(int id, int texture);
 
-	bool canSurvive(Level*, int x, int y, int z) override;
-	AABB* getAABB(Level*, int x, int y, int z) override;
-	int getRenderShape() override;
-	bool isCubeShaped() override;
-	bool isSolidRender() override;
-	bool mayPlace(Level*, int x, int y, int z) override;
-	void tick(Level*, int x, int y, int z, Random*) override;
-	void neighborChanged(Level*, int x, int y, int z, int dir) override;
+	virtual bool canSurvive(Level*, int x, int y, int z) override;
+	virtual AABB* getAABB(Level*, int x, int y, int z) override;
+	virtual int getRenderShape() override;
+	virtual bool isCubeShaped() override;
+	virtual bool isSolidRender() override;
+	virtual bool mayPlace(Level*, int x, int y, int z) override;
+	virtual void tick(Level*, int x, int y, int z, Random*) override;
+	virtual void neighborChanged(Level*, int x, int y, int z, int dir) override;
 
 	void checkAlive(Level*, int x, int y, int z);
 };
 
+class Sapling : public Bush
+{
+public:
+	Sapling(int id, int texture);
+
+	int getTexture(int dir, int data) override;
+	void tick(Level*, int x, int y, int z, Random*) override;
+
+	void growTree(Level*, int x, int y, int z, Random*);
+	bool maybeGrowTree(Level*, int x, int y, int z, Random*);
+};
 
 class TopSnowTile : public Tile
 {
@@ -616,6 +625,7 @@ public:
 	void onPlace(Level*, int x, int y, int z) override;
 	void tick(Level*, int x, int y, int z, Random*) override;
 
+	bool checkSpongesNearby(Level*, int x, int y, int z);
 	bool isWaterBlocking(Level*, int x, int y, int z);
 	bool canSpreadTo(Level*, int x, int y, int z);
 	int getSlopeDistance(Level*, int, int, int, int, int);
@@ -813,4 +823,23 @@ public:
 	{
 		return (data & 8) != 0;
 	}
+};
+
+class SpongeTile : public Tile
+{
+public:
+	SpongeTile(int ID, int texture);
+
+	void onPlace(Level*, int x, int y, int z) override;
+	void destroy(Level*, int x, int y, int z, int dir) override;
+};
+
+class BookshelfTile : public Tile
+{
+public:
+	BookshelfTile(int ID, int texture, Material*);
+
+	int getTexture(int dir) override;
+	int getResource(int data, Random* random) override;
+	int getResourceCount(Random* random) override;
 };
