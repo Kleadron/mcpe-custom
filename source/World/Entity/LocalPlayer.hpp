@@ -56,7 +56,8 @@ public:
 	float field_C30 = 0.0f;
 	float field_C34 = 0.0f;
 	// multiplayer related -- end
-	int field_C38 = 0;
+	int m_iHeldItemID = 0;
+	int m_iHeldItemAux = 0;
 	Minecraft* m_pMinecraft;
 	KeyboardInput* m_pKeyboardInput = nullptr;
 };

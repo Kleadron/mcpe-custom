@@ -18,10 +18,12 @@ void PlayerEquipmentPacket::write(RakNet::BitStream* bs)
 	bs->Write(PACKET_PLAYER_EQUIPMENT);
 	bs->Write(m_playerID);
 	bs->Write(m_itemID);
+	bs->Write(m_itemAux);
 }
 
 void PlayerEquipmentPacket::read(RakNet::BitStream* bs)
 {
 	bs->Read(m_playerID);
 	bs->Read(m_itemID);
+	bs->Read(m_itemAux);
 }

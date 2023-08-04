@@ -24,10 +24,11 @@ void HumanoidMobRenderer::additionalRendering(Mob* mob, float f)
 	Player* player = (Player*)mob;
 
 	int itemID = player->m_pInventory->getSelectedItemId();
+	int itemAux = player->m_pInventory->getSelectedItemAux();
 	if (itemID < 0)
 		return;
 
-	ItemInstance inst(itemID, 1, 0);
+	ItemInstance inst(itemID, 1, itemAux);
 	glPushMatrix();
 	m_pHumanoidModel->m_armL.translateTo(0.0625f);
 	glTranslatef(-0.0625f, 0.4375f, 0.0625f);

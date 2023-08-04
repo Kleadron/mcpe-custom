@@ -201,7 +201,7 @@ void ServerSideNetworkHandler::handle(const RakNet::RakNetGUID& guid, PlayerEqui
 		return;
 	}
 
-	pPlayer->m_pInventory->setSelectionSlotItemId(0, packet->m_itemID, 0);
+	pPlayer->m_pInventory->setSelectionSlotItemId(0, packet->m_itemID, packet->m_itemAux);
 	pPlayer->m_pInventory->selectSlot(0);
 
 	redistributePacket(packet, guid);

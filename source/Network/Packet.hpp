@@ -227,10 +227,12 @@ class PlayerEquipmentPacket : public Packet
 public:
 	PlayerEquipmentPacket() {}
 	PlayerEquipmentPacket(int playerID, int itemID): m_playerID(playerID), m_itemID(itemID) {}
+	PlayerEquipmentPacket(int playerID, int itemID, int itemAux) : m_playerID(playerID), m_itemID(itemID), m_itemAux(itemAux) {}
 	void handle(const RakNet::RakNetGUID&, NetEventCallback* pCallback) override;
 	void write(RakNet::BitStream*);
 	void read(RakNet::BitStream*);
 public:
 	int m_playerID;
 	uint8_t m_itemID;
+	uint8_t m_itemAux;
 };

@@ -17,8 +17,8 @@ LocalPlayer::LocalPlayer(Minecraft* pMinecraft, Level* pLevel, User* pUser, int 
 	m_name = pUser->field_0;
 
 	field_BC4 = i;
-	field_C38 = m_pInventory->getSelectedItemId();
-	// something aux should go here
+	m_iHeldItemID = m_pInventory->getSelectedItemId();
+	m_iHeldItemAux = m_pInventory->getSelectedItemAux();
 }
 
 LocalPlayer::~LocalPlayer()
@@ -200,10 +200,11 @@ void LocalPlayer::tick()
 			field_C34 = m_yaw;
 		}
 
-		if (field_C38 != m_pInventory->getSelectedItemId())
+		if (m_iHeldItemID != m_pInventory->getSelectedItemId() || m_iHeldItemAux != m_pInventory->getSelectedItemAux())
 		{
-			field_C38 = m_pInventory->getSelectedItemId();
-			m_pMinecraft->m_pRakNetInstance->send(new PlayerEquipmentPacket(m_EntityID, field_C38));
+			m_iHeldItemID = m_pInventory->getSelectedItemId();
+			m_iHeldItemAux = m_pInventory->getSelectedItemAux();
+			m_pMinecraft->m_pRakNetInstance->send(new PlayerEquipmentPacket(m_EntityID, m_iHeldItemID, m_iHeldItemAux));
 		}
 	}
 }

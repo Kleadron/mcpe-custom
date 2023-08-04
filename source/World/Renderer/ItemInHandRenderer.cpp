@@ -294,6 +294,7 @@ void ItemInHandRenderer::tick()
 	field_20 = field_1C;
 
 	int itemID = m_pMinecraft->m_pLocalPlayer->m_pInventory->getSelectedItemId();
+	int itemAux = m_pMinecraft->m_pLocalPlayer->m_pInventory->getSelectedItemAux();
 
 	float a = 1.0f - field_1C;
 	if (a < -0.4f)
@@ -302,7 +303,7 @@ void ItemInHandRenderer::tick()
 		a  = 0.4f;
 
 	m_ItemInstance.m_itemID = itemID;
-	m_ItemInstance.m_auxValue = m_pMinecraft->m_pLocalPlayer->m_pInventory->getSelectedItemAux();
+	m_ItemInstance.m_auxValue = itemAux;
 
 	field_1C += a;
 }
