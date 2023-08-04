@@ -296,7 +296,11 @@ void drawArrayVT(GLuint buffer, int count, int stride)
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glVertexPointer(3, GL_FLOAT, stride, nullptr);
 	glEnableClientState(GL_VERTEX_ARRAY);
+#ifdef GFX_USE_QUADS
+	glDrawArrays(GL_QUADS, 0, count);
+#else
 	glDrawArrays(GL_TRIANGLES, 0, count);
+#endif
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
@@ -310,7 +314,11 @@ void drawArrayVTC(GLuint buffer, int count, int stride)
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
+#ifdef GFX_USE_QUADS
+	glDrawArrays(GL_QUADS, 0, count);
+#else
 	glDrawArrays(GL_TRIANGLES, 0, count);
+#endif
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);

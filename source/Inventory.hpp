@@ -22,8 +22,12 @@ public:
 	int getSelectionSize();
 	int getSelectionSlotItemId(int slotNo);
 	int getSelectedItemId();
+	int getSelectionSlotItemAux(int slotNo);
+	int getSelectionSlotCombo(int slotNo);
+	int getSelectedItemAux();
 	void selectSlot(int slotNo);
-	void setSelectionSlotItemId(int slotNo, int item);
+	void setSelectionSlotItemId(int slotNo, int item, int aux);
+	void setSelectionSlotCombo(int slotNo, int combo);
 
 public:
 	int m_SelectedHotbarSlot;

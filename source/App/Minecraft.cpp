@@ -23,6 +23,7 @@
 // note: Nothing changes these, so it'll think we're always running at 854x480 even if not
 int Minecraft::width  = C_DEFAULT_SCREEN_WIDTH;
 int Minecraft::height = C_DEFAULT_SCREEN_HEIGHT;
+bool Minecraft::windowSizeChanged = false;
 bool Minecraft::useAmbientOcclusion = false;
 int Minecraft::customDebugId = 0;
 
@@ -235,7 +236,7 @@ label_3:
 				return;
 			}
 
-			ItemInstance item(m_pLocalPlayer->m_pInventory->getSelectedItemId(), 999, 0);
+			ItemInstance item(m_pLocalPlayer->m_pInventory->getSelectedItemId(), 999, m_pLocalPlayer->m_pInventory->getSelectedItemAux());
 			if (m_pGameMode->useItemOn(m_pLocalPlayer, m_pLevel, item.m_itemID < 0 ? nullptr : &item, hr.m_tileX, hr.m_tileY, hr.m_tileZ, hr.m_hitSide))
 			{
 				m_pLocalPlayer->swing();
@@ -261,7 +262,7 @@ label_3:
 					}
 				}
 
-				m_pRakNetInstance->send(new PlaceBlockPacket(m_pLocalPlayer->m_EntityID, dx, dy, dz, uint8_t(item.m_itemID), uint8_t(hr.m_hitSide)));
+				m_pRakNetInstance->send(new PlaceBlockPacket(m_pLocalPlayer->m_EntityID, dx, dy, dz, uint8_t(item.m_itemID), uint8_t(hr.m_hitSide), uint8_t(item.m_auxValue)));
 				return;
 			}
 		}
@@ -288,7 +289,7 @@ label_3:
 			int id = m_pLocalPlayer->m_pInventory->getSelectedItemId();
 			if (id >= 0)
 			{
-				ItemInstance item(m_pLocalPlayer->m_pInventory->getSelectedItemId(), 999, 0);
+				ItemInstance item(id, 999, m_pLocalPlayer->m_pInventory->getSelectedItemAux());
 				if (m_pGameMode->useItem(m_pLocalPlayer, m_pLevel, &item))
 					m_pGameRenderer->m_pItemInHandRenderer->itemUsed();
 			}
@@ -300,6 +301,14 @@ void Minecraft::tickInput()
 {
 	if (field_D14)
 	{
+#ifndef ORIGINAL_CODE
+		if (windowSizeChanged)
+		{
+			field_D14->setSize(int(width * Gui::InvGuiScale), int(height * Gui::InvGuiScale));
+			windowSizeChanged = false;
+		}
+#endif 
+
 		if (!field_D14->field_10)
 		{
 			field_DB0 = true;
@@ -530,6 +539,15 @@ void Minecraft::tick()
 		{
 			m_pTextures->tick();
 			m_pParticleEngine->tick();
+
+#ifndef ORIGINAL_CODE
+			if (m_pMobPersp)
+			{
+				m_pSoundEngine->m_soundSystem.setListenerPos(m_pMobPersp->m_pos.x, m_pMobPersp->m_pos.y, m_pMobPersp->m_pos.z);
+				m_pSoundEngine->m_soundSystem.setListenerAngle(m_pMobPersp->m_yaw, m_pMobPersp->m_pitch);
+			}
+#endif
+
 		}
 
 		if (field_D14)
@@ -539,6 +557,17 @@ void Minecraft::tick()
 
 void Minecraft::update()
 {
+	/*m_pSoundEngine->play("random.splash");
+	m_pSoundEngine->play("random.explode");
+	m_pSoundEngine->play("random.click");
+
+	m_pSoundEngine->play("step.cloth");
+	m_pSoundEngine->play("step.grass");
+	m_pSoundEngine->play("step.gravel");
+	m_pSoundEngine->play("step.sand");
+	m_pSoundEngine->play("step.stone");
+	m_pSoundEngine->play("step.wood");*/
+
 #ifndef ORIGINAL_CODE
 	tickMouse();
 #endif

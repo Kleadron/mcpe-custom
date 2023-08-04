@@ -30,6 +30,7 @@
     <ClInclude Include="..\compat\AKeyCodes.hpp" />
     <ClInclude Include="..\GameMods.hpp" />
     <ClInclude Include="..\platforms\windows\AppPlatform_windows.hpp" />
+    <ClInclude Include="..\platforms\windows\SoundBufferReleaseHack.h" />
     <ClInclude Include="..\platforms\windows\SoundSystem_windows.hpp" />
     <ClInclude Include="..\source\App\App.hpp" />
     <ClInclude Include="..\source\App\AppPlatform.hpp" />
@@ -57,6 +58,7 @@
     <ClInclude Include="..\source\GUI\RolledSelectionList.hpp" />
     <ClInclude Include="..\source\GUI\Screen\ChatScreen.hpp" />
     <ClInclude Include="..\source\GUI\Screen\ConfirmScreen.hpp" />
+    <ClInclude Include="..\source\GUI\Screen\CreateWorldScreen.hpp" />
     <ClInclude Include="..\source\GUI\Screen\DeleteWorldScreen.hpp" />
     <ClInclude Include="..\source\GUI\Screen\IngameBlockSelectionScreen.hpp" />
     <ClInclude Include="..\source\GUI\Screen\InvalidLicenseScreen.hpp" />
@@ -149,6 +151,7 @@
     <ClInclude Include="..\source\World\Renderer\HumanoidMobRenderer.hpp" />
     <ClInclude Include="..\source\World\Renderer\ItemInHandRenderer.hpp" />
     <ClInclude Include="..\source\World\Renderer\ItemRenderer.hpp" />
+    <ClInclude Include="..\source\World\Renderer\ItemSpriteRenderer.hpp" />
     <ClInclude Include="..\source\World\Renderer\LevelRenderer.hpp" />
     <ClInclude Include="..\source\World\Renderer\MobRenderer.hpp" />
     <ClInclude Include="..\source\World\Renderer\TileRenderer.hpp" />
@@ -324,6 +327,7 @@
     <ClCompile Include="..\compat\GLExt.cpp" />
     <ClCompile Include="..\platforms\windows\AppPlatform_windows.cpp" />
     <ClCompile Include="..\platforms\windows\main.cpp" />
+    <ClCompile Include="..\platforms\windows\SoundBufferReleaseHack.c" />
     <ClCompile Include="..\platforms\windows\SoundSystem_windows.cpp" />
     <ClCompile Include="..\source\App\App.cpp" />
     <ClCompile Include="..\source\App\AppPlatform.cpp" />
@@ -351,6 +355,7 @@
     <ClCompile Include="..\source\GUI\RolledSelectionList.cpp" />
     <ClCompile Include="..\source\GUI\Screen\ChatScreen.cpp" />
     <ClCompile Include="..\source\GUI\Screen\ConfirmScreen.cpp" />
+    <ClCompile Include="..\source\GUI\Screen\CreateWorldScreen.cpp" />
     <ClCompile Include="..\source\GUI\Screen\DeleteWorldScreen.cpp" />
     <ClCompile Include="..\source\GUI\Screen\IngameBlockSelectionScreen.cpp" />
     <ClCompile Include="..\source\GUI\Screen\InvalidLicenseScreen.cpp" />
@@ -470,6 +475,7 @@
     <ClCompile Include="..\source\World\Renderer\HumanoidMobRenderer.cpp" />
     <ClCompile Include="..\source\World\Renderer\ItemInHandRenderer.cpp" />
     <ClCompile Include="..\source\World\Renderer\ItemRenderer.cpp" />
+    <ClCompile Include="..\source\World\Renderer\ItemSpriteRenderer.cpp" />
     <ClCompile Include="..\source\World\Renderer\LevelRenderer.cpp" />
     <ClCompile Include="..\source\World\Renderer\MobRenderer.cpp" />
     <ClCompile Include="..\source\World\Renderer\TileRenderer.cpp" />
@@ -485,6 +491,7 @@
     <ClCompile Include="..\source\World\Storage\MemoryLevelStorage.cpp" />
     <ClCompile Include="..\source\World\Storage\MemoryLevelStorageSource.cpp" />
     <ClCompile Include="..\source\World\TickNextTickData.cpp" />
+    <ClCompile Include="..\source\World\Tile\BookshelfTile.cpp" />
     <ClCompile Include="..\source\World\Tile\Bush.cpp" />
     <ClCompile Include="..\source\World\Tile\CactusTile.cpp" />
     <ClCompile Include="..\source\World\Tile\ClayTile.cpp" />
@@ -513,6 +520,8 @@
     <ClCompile Include="..\source\World\Tile\SandTile.cpp" />
     <ClCompile Include="..\source\World\Tile\SoulSandTile.cpp" />
     <ClCompile Include="..\source\World\Tile\SpawnerTile.cpp" />
+    <ClCompile Include="..\source\World\Tile\Sapling.cpp" />
+    <ClCompile Include="..\source\World\Tile\SpongeTile.cpp" />
     <ClCompile Include="..\source\World\Tile\StairTile.cpp" />
     <ClCompile Include="..\source\World\Tile\StoneSlabTile.cpp" />
     <ClCompile Include="..\source\World\Tile\StoneTile.cpp" />

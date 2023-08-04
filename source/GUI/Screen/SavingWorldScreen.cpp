@@ -1,3 +1,11 @@
+/********************************************************************
+	Minecraft: Pocket Edition - Decompilation Project
+	Copyright (C) 2023 iProgramInCpp
+
+	The following code is licensed under the BSD 1 clause license.
+	SPDX-License-Identifier: BSD-1-Clause
+ ********************************************************************/
+
 #include "SavingWorldScreen.hpp"
 #include "RenameMPLevelScreen.hpp"
 #include "StartMenuScreen.hpp"
@@ -19,7 +27,7 @@ void SavingWorldScreen::render(int mouseX, int mouseY, float f)
 	int yPos = x_height / 2;
 
 	int width = m_pFont->width("Saving chunks");
-	m_pFont->drawShadow("Saving chunks", (x_width - width) / 2, yPos + 4, 0xFFFFFF);
+	m_pFont->drawShadow("Saving chunks", (x_width - width) / 2, yPos, 0xFFFFFF);
 }
 
 void SavingWorldScreen::tick()
@@ -36,7 +44,7 @@ void SavingWorldScreen::tick()
 		Level* pLevel = m_pMinecraft->m_pLevel;
 		if (pLevel)
 		{
-			pLevel->saveAllChunks();
+			pLevel->saveUnsavedChunks();
 			pLevel->saveLevelData();
 			pLevel->savePlayerData();
 

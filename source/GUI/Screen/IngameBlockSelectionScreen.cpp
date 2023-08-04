@@ -62,7 +62,7 @@ void IngameBlockSelectionScreen::init()
 
 	for (int i = 9; i < C_MAX_HOTBAR_ITEMS + C_MAX_INVENTORY_ITEMS; i++)
 	{
-		if (pInv->getSelectionSlotItemId(i) == pInv->getSelectedItemId())
+		if (pInv->getSelectionSlotItemId(i) == pInv->getSelectedItemId() && pInv->getSelectionSlotItemAux(i) == pInv->getSelectedItemAux())
 		{
 			m_selectedSlot = i - 9;
 			break;
@@ -78,8 +78,9 @@ void IngameBlockSelectionScreen::renderSlot(int index, int x, int y, float f)
 	int item = m_pMinecraft->m_pLocalPlayer->m_pInventory->getSelectionSlotItemId(index);
 	if (item < 0)
 		return;
+	int aux = m_pMinecraft->m_pLocalPlayer->m_pInventory->getSelectionSlotItemAux(index);
 
-	ItemInstance inst(item, 2, 0);
+	ItemInstance inst(item, 2, aux); 
 	ItemRenderer::renderGuiItem(m_pMinecraft->m_pFont, m_pMinecraft->m_pTextures, &inst, x, y, item);
 }
 
@@ -88,11 +89,15 @@ void IngameBlockSelectionScreen::renderSlots()
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	m_pMinecraft->m_pTextures->loadAndBindTexture("gui/gui.png");
 
+	glEnable(GL_BLEND);
+
 	for (int y = 0; y != -22 * C_SLOTS_HEIGHT; y -= 22)
 		blit(m_width / 2 - 182 / 2, m_height - 66 + y, 0, 0, 182, 22, 0, 0);
 
 	if (m_selectedSlot >= 0)
 		blit(m_width / 2 - 92 + 20 * (m_selectedSlot % 9), m_height - 67 - 22 * (m_selectedSlot / 9), 0, 22, 24, 22, 0, 0);
+
+	glDisable(GL_BLEND);
 
 	for (int y = 0, index = 9; y < C_SLOTS_HEIGHT; y++)
 	{
@@ -122,12 +127,14 @@ void IngameBlockSelectionScreen::render(int x, int y, float f)
 
 	fill(0, 0, m_width, m_height, 0x80000000);
 
-	glEnable(GL_BLEND);
+	//glEnable(GL_BLEND);
 	renderSlots();
 
 #ifdef DEMO
 	renderDemoOverlay();
 #endif
+
+	//glDisable(GL_BLEND);
 
 	glEnable(GL_DEPTH_TEST);
 }
@@ -158,6 +165,7 @@ void IngameBlockSelectionScreen::selectSlotAndClose()
 {
 	Inventory* pInv = m_pMinecraft->m_pLocalPlayer->m_pInventory;
 	int item = pInv->getSelectionSlotItemId(m_selectedSlot + 9);
+	int aux = pInv->getSelectionSlotItemAux(m_selectedSlot + 9);
 	int idx = 0;
 
 	// @TODO: Fix gotos
@@ -167,7 +175,7 @@ void IngameBlockSelectionScreen::selectSlotAndClose()
 #define MAX_ITEMS (C_MAX_HOTBAR_ITEMS - 2)
 #endif
 
-	if (item == pInv->getSelectionSlotItemId(0))
+	if (item == pInv->getSelectionSlotItemId(0) && aux == pInv->getSelectionSlotItemAux(0))
 	{
 	label_4:
 		if (!idx)
@@ -175,14 +183,15 @@ void IngameBlockSelectionScreen::selectSlotAndClose()
 	}
 	else while (++idx != MAX_ITEMS)
 	{
-		if (item == pInv->getSelectionSlotItemId(idx))
+		if (item == pInv->getSelectionSlotItemId(idx) && aux == pInv->getSelectionSlotItemAux(idx))
 			goto label_4;
 	}
 
 	while (true)
 	{
 		int item = pInv->getSelectionSlotItemId(idx - 1);
-		pInv->setSelectionSlotItemId(idx, item);
+		int itemaux = pInv->getSelectionSlotItemAux(idx - 1);
+		pInv->setSelectionSlotItemId(idx, item, itemaux);
 
 		if (idx == 1)
 			break;
@@ -190,7 +199,7 @@ void IngameBlockSelectionScreen::selectSlotAndClose()
 		--idx;
 	}
 label_5:
-	pInv->setSelectionSlotItemId(0, item);
+	pInv->setSelectionSlotItemId(0, item, aux);
 	pInv->selectSlot(0);
 
 	m_pMinecraft->m_pSoundEngine->play("random.click");

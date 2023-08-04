@@ -172,12 +172,13 @@ void ClientSideNetworkHandler::handle(const RakNet::RakNetGUID& rakGuid, PlaceBl
 	int z = pPlaceBlockPkt->m_z;
 	int tile = pPlaceBlockPkt->m_tile;
 	int face = pPlaceBlockPkt->m_face;
+	int aux = pPlaceBlockPkt->m_data;
 
 	if (!m_pLevel->mayPlace(tile, x, y, z, true))
 		return;
 
 	Tile* pTile = Tile::tiles[tile];
-	if (!m_pLevel->setTile(x, y, z, tile))
+	if (!m_pLevel->setTileAndData(x, y, z, tile, aux))
 		return;
 
 	Tile::tiles[tile]->setPlacedOnFace(m_pLevel, x, y, z, face);
@@ -335,7 +336,7 @@ void ClientSideNetworkHandler::handle(const RakNet::RakNetGUID& rakGuid, PlayerE
 		return;
 	}
 
-	pPlayer->m_pInventory->setSelectionSlotItemId(0, pPlayerEquipmentPkt->m_itemID);
+	pPlayer->m_pInventory->setSelectionSlotItemId(0, pPlayerEquipmentPkt->m_itemID, pPlayerEquipmentPkt->m_itemAux);
 	pPlayer->m_pInventory->selectSlot(0);
 }
 

@@ -73,6 +73,9 @@ public:
 
 public:
 	static int width, height;
+#ifndef ORIGINAL_CODE
+	static bool windowSizeChanged;
+#endif
 	static bool useAmbientOcclusion;
 	static const char* progressMessages[];
 	static const bool DEADMAU5_CAMERA_CHEATS;

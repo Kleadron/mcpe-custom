@@ -71,6 +71,37 @@ void StartMenuScreen::buttonClicked(Button* pButton)
 	}
 }
 
+#ifndef ORIGINAL_CODE
+void StartMenuScreen::setSize(int w, int h)
+{
+	Screen::setSize(w, h);
+
+	int yPos = m_height / 2;
+
+	m_joinButton.m_yPos = yPos + 25;
+	m_startButton.m_yPos = yPos - 3;
+
+	yPos += 55;
+
+	m_optionsButton.m_yPos = yPos;
+	m_testButton.m_yPos = yPos;
+	m_buyButton.m_yPos = yPos;
+
+	m_startButton.m_xPos = (m_width - m_startButton.m_width) / 2;
+
+	int x1 = m_width - m_joinButton.m_width;
+
+	m_joinButton.m_xPos = x1 / 2;
+	m_optionsButton.m_xPos = x1 / 2;
+	m_buyButton.m_xPos = x1 / 2 + m_optionsButton.m_width + 4;
+	m_testButton.m_xPos = x1 / 2 + m_optionsButton.m_width + 4;
+
+	field_16C = m_width - 1 - m_pFont->width(field_154);
+
+	field_188 = (m_width - m_pFont->width(field_170)) / 2;
+}
+#endif
+
 void StartMenuScreen::init()
 {
 	int yPos = m_height / 2;
@@ -109,7 +140,7 @@ void StartMenuScreen::init()
 	field_154 = "\xFFMojang AB";
 	field_16C = m_width - 1 - m_pFont->width(field_154);
 
-	field_170 = "v0.1.0 alpha"
+	field_170 = "v0.1.0 alpha (Custom Edition)"
 #ifdef DEMO
 		" (Demo)"
 #endif

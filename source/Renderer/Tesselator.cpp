@@ -148,9 +148,11 @@ void Tesselator::draw()
 
 		// if we want to draw quads, draw triangles actually
 		// otherwise, just pass the mode, it's fine
+#ifndef GFX_USE_QUADS
 		if (m_drawArraysMode == GL_QUADS)
 			glDrawArrays(GL_TRIANGLES, 0, field_4);
 		else
+#endif
 			glDrawArrays(m_drawArraysMode, 0, field_4);
 
 		glDisableClientState(GL_VERTEX_ARRAY);
@@ -244,6 +246,7 @@ void Tesselator::vertexUV(float x, float y, float z, float u, float v)
 void Tesselator::vertex(float x, float y, float z)
 {
 	field_30++;
+#ifndef GFX_USE_QUADS
 	if (m_drawArraysMode == GL_QUADS && !(field_30 << 30))
 	{
 		for (int v18 = 3; v18 != 1; v18--)
@@ -269,6 +272,7 @@ void Tesselator::vertex(float x, float y, float z)
 			field_2C++;
 		}
 	}
+#endif
 
 	Vertex* pVert = &m_pVertices[field_2C];
 	if (m_bHaveTex)

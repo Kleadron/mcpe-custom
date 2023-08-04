@@ -16,6 +16,8 @@ void ItemInstance::init(int itemID, int amount, int auxValue)
 	m_amount = amount;
 
 	//@BUG? Not using the auxValue.  This is problematic in the case of wool and dyes.
+	// WE ARE USING THE AUX VALUE NOW. THIS WAS CONFUSING.
+	m_auxValue = auxValue;
 }
 
 ItemInstance::ItemInstance(Item* pItem)

@@ -1067,7 +1067,7 @@
     </ClCompile>
     <ClCompile Include="..\source\World\Tile\CactusTile.cpp">
       <Filter>Source Files\World\Tile</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\source\World\RegionFile.cpp">
       <Filter>Source Files\World</Filter>
     </ClCompile>
@@ -1079,6 +1079,24 @@
     </ClCompile>
     <ClCompile Include="..\source\GUI\Screen\SavingWorldScreen.cpp">
       <Filter>Source Files\GUI\Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\GUI\Screen\CreateWorldScreen.cpp">
+      <Filter>Source Files\GUI\Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platforms\windows\SoundBufferReleaseHack.c">
+      <Filter>Source Files\App</Filter>
+	</ClCompile>
+    <ClCompile Include="..\source\World\Renderer\ItemSpriteRenderer.cpp">
+      <Filter>Source Files\World\Renderer\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\World\Tile\Sapling.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\World\Tile\SpongeTile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\World\Tile\BookshelfTile.cpp">
+      <Filter>Source Files\World\Tile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1944,7 +1962,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\platforms\windows\SoundSystem_windows.hpp">
-		<Filter>Header Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\source\World\RegionFile.hpp">
       <Filter>Header Files\World</Filter>
@@ -1957,6 +1975,15 @@
     </ClInclude>
     <ClInclude Include="..\source\GUI\Screen\SavingWorldScreen.hpp">
       <Filter>Header Files\GUI\Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\GUI\Screen\CreateWorldScreen.hpp">
+      <Filter>Header Files\GUI\Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="..\platforms\windows\SoundBufferReleaseHack.h">
+      <Filter>Header Files\App</Filter>
+	</ClInclude>
+    <ClInclude Include="..\source\World\Renderer\ItemSpriteRenderer.hpp">
+      <Filter>Header Files\World\Renderer\Entity</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

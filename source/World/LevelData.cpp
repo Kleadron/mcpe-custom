@@ -71,7 +71,7 @@ void PlayerData::loadPlayer(Player* player)
 	player->setPos(m_pos.x, m_pos.y, m_pos.z);
 
 	for (int i = 0; i < C_MAX_HOTBAR_ITEMS; i++)
-		player->m_pInventory->setSelectionSlotItemId(i, m_hotbar[i]);
+		player->m_pInventory->setSelectionSlotCombo(i, m_hotbar[i]);
 }
 
 void PlayerData::savePlayer(Player* player)
@@ -86,5 +86,5 @@ void PlayerData::savePlayer(Player* player)
 	field_28 = player->field_7C;
 
 	for (int i = 0; i < C_MAX_HOTBAR_ITEMS; i++)
-		m_hotbar[i] = player->m_pInventory->getSelectionSlotItemId(i);
+		m_hotbar[i] = player->m_pInventory->getSelectionSlotCombo(i);
 }

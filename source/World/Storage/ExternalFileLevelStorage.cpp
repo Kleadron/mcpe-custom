@@ -10,6 +10,8 @@
 #include "Level.hpp"
 #include "GetTime.h"
 
+#ifndef DEMO
+
 #define C_CHUNKS_TO_SAVE_PER_TICK (2)
 
 ExternalFileLevelStorage::ExternalFileLevelStorage(const std::string& a, const std::string& path) :
@@ -30,6 +32,14 @@ ExternalFileLevelStorage::ExternalFileLevelStorage(const std::string& a, const s
 	}
 
 	readPlayerData(datPlayer, m_pLevelData);
+}
+
+ExternalFileLevelStorage::~ExternalFileLevelStorage()
+{
+	if (m_pRegionFile)
+		delete m_pRegionFile;
+	if (m_pLevelData)
+		delete m_pLevelData;
 }
 
 LevelData* ExternalFileLevelStorage::prepareLevel(Level* level)
@@ -113,7 +123,7 @@ void ExternalFileLevelStorage::tick()
 
 			if (iter == m_unsavedLevelChunks.end())
 			{
-				UnsavedLevelChunk ulc = { index, RakNet::GetTimeMS(), pChunk };
+				UnsavedLevelChunk ulc = { index, int(RakNet::GetTimeMS()), pChunk };
 				m_unsavedLevelChunks.push_back(ulc);
 			}
 
@@ -304,3 +314,5 @@ bool ExternalFileLevelStorage::writeLevelData(const std::string& path, LevelData
 
 	return true;
 }
+
+#endif

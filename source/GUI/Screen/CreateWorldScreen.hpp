@@ -10,19 +10,22 @@
 
 #include "Screen.hpp"
 
-#ifdef ENH_IMPROVED_SAVING
+#ifndef ORIGINAL_CODE
 
-class SavingWorldScreen : public Screen
+class CreateWorldScreen : public Screen
 {
 public:
-	SavingWorldScreen(bool bCopyMap);
-	
+	CreateWorldScreen();
+
+	void init() override;
+	void buttonClicked(Button* pButton) override;
 	void render(int mouseX, int mouseY, float f) override;
-	void tick() override;
 
 public:
-	bool m_bCopyMapAtEnd;
-	int m_timer = 0;
+	TextInputBox m_textName;
+	TextInputBox m_textSeed;
+	Button m_btnBack;
+	Button m_btnCreate;
 };
 
 #endif

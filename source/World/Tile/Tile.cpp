@@ -605,44 +605,41 @@ void Tile::initTiles()
 		->setDestroyTime(0.8f)
 		->setSoundType(Tile::SOUND_CLOTH)
 		->setDescriptionId("cloth");
-
-	// Custom Tiles
-#ifdef MOD_EXTRA_BLOCKS
-	Tile::sapling = (new Bush(TILE_SAPLING, TEXTURE_SAPLING)) // ID: 6
+		
+	Tile::sapling = (new Sapling(TILE_SAPLING, TEXTURE_SAPLING))
 		->init()
 		->setDestroyTime(0.0f)
-		->setExplodeable(0.0f)
 		->setSoundType(Tile::SOUND_GRASS)
 		->setDescriptionId("sapling");
 
-	Tile::sponge = (new DirtTile(TILE_SPONGE, TEXTURE_SPONGE, Material::dirt)) // ID:19
+	Tile::sponge = (new SpongeTile(TILE_SPONGE, TEXTURE_SPONGE))
 		->init()
-		->setDestroyTime(0.6f)
-		->setExplodeable(0.6f)
-		->setSoundType(Tile::SOUND_GRASS)
+		->setDestroyTime(0.5f)
+		->setSoundType(Tile::SOUND_CLOTH)
 		->setDescriptionId("sponge");
 
-	Tile::lapisBlock = (new OreTile(TILE_LAPIS_BLOCK, TEXTURE_LAPIS_BLOCK)) // ID: 22
+	Tile::lapisBlock = (new MetalTile(TILE_BLOCK_LAPIS, TEXTURE_LAPIS, Material::metal))
 		->init()
 		->setDestroyTime(3.0f)
-		->setExplodeable(5.0f)
-		->setSoundType(Tile::SOUND_STONE)
+		->setExplodeable(10.0f)
+		->setSoundType(Tile::SOUND_METAL)
 		->setDescriptionId("blockLapis");
 
-	Tile::cobweb = (new Bush(TILE_COBWEB, TEXTURE_COBWEB))
+	Tile::bookshelf = (new BookshelfTile(TILE_BOOKSHELF, TEXTURE_BOOKSHELF, Material::wood))
 		->init()
-		->setDestroyTime(4.0f)
-		->setExplodeable(4.0f)
-		->setSoundType(Tile::SOUND_STONE)
-		->setDescriptionId("cobweb");
-
-	Tile::mossStone = (new Tile(TILE_MOSSY_STONE, TEXTURE_MOSSY_STONE, Material::stone)) // ID: 48
+		->setDestroyTime(1.5f)
+		->setSoundType(Tile::SOUND_WOOD)
+		->setDescriptionId("bookshelf");
+	
+	Tile::mossStone = (new Tile(TILE_MOSS_STONE, TEXTURE_MOSSY_STONE, Material::stone))
 		->init()
 		->setDestroyTime(2.0f)
 		->setExplodeable(10.0f)
 		->setSoundType(Tile::SOUND_STONE)
-		->setDescriptionId("mossStone");
-
+		->setDescriptionId("stoneMoss");
+		
+	// custom additions here
+#ifdef MOD_EXTRA_BLOCKS
 	Tile::spawner = (new SpawnerTile(TILE_SPAWNER, TEXTURE_SPAWNER, Material::stone)) // ID: 52
 		->init()
 		->setDestroyTime(0.6f)
@@ -683,6 +680,13 @@ void Tile::initTiles()
 		->setExplodeable(0.3f)
 		->setSoundType(Tile::SOUND_GLASS)
 		->setDescriptionId("glowStone");
+
+	Tile::cobweb = (new Bush(TILE_COBWEB, TEXTURE_COBWEB))
+		->init()
+		->setDestroyTime(4.0f)
+		->setExplodeable(4.0f)
+		->setSoundType(Tile::SOUND_STONE)
+		->setDescriptionId("cobweb");
 #endif
 
 	for (int i = 0; i < C_MAX_TILES; i++)
@@ -1291,20 +1295,18 @@ Tile
 	*Tile::stairs_wood,
 	*Tile::stairs_stone,
 	*Tile::door_wood,
-#ifndef MOD_EXTRA_BLOCKS
-	*Tile::door_iron;
-#else
-	* Tile::door_iron,
-	// CUSTOM TILES
+	*Tile::door_iron,
 	*Tile::sapling,     // ID: 6
 	*Tile::sponge,      // ID: 19
 	*Tile::lapisBlock,  // ID: 22
+	*Tile::bookshelf,
+	*Tile::mossStone,	// ID: 48
+	// CUSTOM TILES
 	*Tile::cobweb,      // ID: 30
-	*Tile::mossStone,   // ID: 48
 	*Tile::spawner,     // ID: 52
 	*Tile::snow,        // ID: 80
 	*Tile::cactus,      // ID: 81
 	*Tile::netherrack,  // ID: 87
 	*Tile::soulSand,    // ID: 88
 	*Tile::glowStone;   // ID: 89
-#endif
+

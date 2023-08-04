@@ -23,7 +23,11 @@ public:
 
 	void init(Minecraft*, int, int);
 	void updateTabButtonSelection();
+#ifndef ORIGINAL_CODE
+	virtual void setSize(int width, int height);
+#else
 	void setSize(int width, int height);
+#endif
 
 	virtual void render(int, int, float);
 	virtual void init();

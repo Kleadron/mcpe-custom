@@ -13,6 +13,7 @@
 #include <strmif.h>
 #include <stdexcept>
 #include <vector>
+#include <map>
 
 #pragma comment(lib, "dsound.lib")
 #pragma comment(lib, "dxguid.lib")
@@ -30,16 +31,18 @@ public:
 	~SoundSystemWindows();
 	virtual bool isAvailable();
 	virtual void setListenerPos(float x, float y, float z);
-	virtual void setListenerAngle(float f);
+	virtual void setListenerAngle(float yaw, float pitch);
 	virtual void load(const std::string& sound);
 	virtual void play(const std::string& sound);
 	virtual void pause(const std::string& sound);
 	virtual void stop(const std::string& sound);
 	virtual void playAt(const SoundDesc& sound, float x, float y, float z, float a, float b);
+	void apply3D(LPDIRECTSOUNDBUFFER soundbuffer, float x, float y, float z);
 private:
+	bool m_available = false;
 	IDirectSound8* m_directsound;
 	IDirectSoundBuffer* m_primarybuffer;
-
-	std::vector<LPDIRECTSOUNDBUFFER*> m_buffers;
+	LPDIRECTSOUND3DLISTENER8 m_listener;
+	std::map<PCMSoundHeader*, LPDIRECTSOUNDBUFFER> m_sourceBuffers;
+	std::vector<LPDIRECTSOUNDBUFFER> m_playingBuffers;
 };
-

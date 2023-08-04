@@ -21,6 +21,9 @@ public:
 	bool isInGameScreen() override;
 	void render(int, int, float) override;
 	void tick() override;
+#ifndef ORIGINAL_CODE
+	void setSize(int, int) override;
+#endif
 
 private:
 	Button m_startButton;

@@ -6,21 +6,29 @@
 	SPDX-License-Identifier: BSD-1-Clause
  ********************************************************************/
 
-#include "ChunkSource.hpp"
+#include "Tile.hpp"
 #include "Level.hpp"
 
-ChunkSource::~ChunkSource()
+BookshelfTile::BookshelfTile(int a, int b, Material* c) : Tile(a, b, c)
 {
 }
 
-void ChunkSource::saveAll()
+int BookshelfTile::getTexture(int dir)
 {
+	if (dir <= DIR_YPOS)
+		return TEXTURE_PLANKS;
 
+	return m_TextureFrame;
 }
 
-#ifdef ENH_IMPROVED_SAVING
-void ChunkSource::saveUnsaved()
+int BookshelfTile::getResource(int data, Random* random)
 {
-
+	return 0; // would be Book
 }
-#endif
+
+int BookshelfTile::getResourceCount(Random* random)
+{
+	return 3;
+}
+
+

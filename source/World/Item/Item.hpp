@@ -221,11 +221,13 @@ class TilePlanterItem : public Item
 {
 public:
 	TilePlanterItem(int id, int place);
+	TilePlanterItem(int id, int place, int data);
 
 	virtual bool useOn(ItemInstance*, Player*, Level*, int, int, int, int);
 
 public:
 	int m_tile;
+	int m_data;
 };
 
 class DoorItem : public Item
