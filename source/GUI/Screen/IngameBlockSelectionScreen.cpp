@@ -95,7 +95,7 @@ void IngameBlockSelectionScreen::renderSlots()
 		blit(m_width / 2 - 182 / 2, m_height - 66 + y, 0, 0, 182, 22, 0, 0);
 
 	if (m_selectedSlot >= 0)
-		blit(m_width / 2 - 92 + 20 * (m_selectedSlot % 9), m_height - 67 - 22 * (m_selectedSlot / 9), 0, 24, 24, 22, 0, 0);
+		blit(m_width / 2 - 92 + 20 * (m_selectedSlot % 9), m_height - 67 - 22 * (m_selectedSlot / 9), 0, 22, 24, 24, 0, 0);
 
 	glDisable(GL_BLEND);
 
