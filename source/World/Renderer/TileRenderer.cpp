@@ -2373,6 +2373,14 @@ void TileRenderer::renderTile(Tile* tile, int data RENDER_TILE_ARG_PATCH)
 
 #ifdef ENH_SHADE_HELD_TILES
 	t.color(bright, bright, bright);
+
+	float shadeSideLight = 0.8f;
+	float shadeSideDark = 0.6f;
+	if (swapShadeSides)
+	{
+		shadeSideLight = 0.6f;
+		shadeSideDark = 0.8f;
+	}
 #else
 	t.color(255, 255, 255);
 #endif
@@ -2387,10 +2395,10 @@ void TileRenderer::renderTile(Tile* tile, int data RENDER_TILE_ARG_PATCH)
 		renderFaceUp  (tile, 0.0f, 0.0f, 0.0f, tile->getTexture(DIR_YNEG, data));
 		SHADE_IF_NEEDED(1.0f);
 		renderFaceDown(tile, 0.0f, 0.0f, 0.0f, tile->getTexture(DIR_YPOS, data));
-		SHADE_IF_NEEDED(0.6f);
+		SHADE_IF_NEEDED(shadeSideLight);
 		renderNorth   (tile, 0.0f, 0.0f, 0.0f, tile->getTexture(DIR_ZNEG, data));
 		renderSouth   (tile, 0.0f, 0.0f, 0.0f, tile->getTexture(DIR_ZPOS, data));
-		SHADE_IF_NEEDED(0.8f);
+		SHADE_IF_NEEDED(shadeSideDark);
 		renderWest    (tile, 0.0f, 0.0f, 0.0f, tile->getTexture(DIR_XNEG, data));
 		renderEast    (tile, 0.0f, 0.0f, 0.0f, tile->getTexture(DIR_XPOS, data));
 		SHADE_IF_NEEDED(1.0f);
@@ -2447,10 +2455,10 @@ void TileRenderer::renderTile(Tile* tile, int data RENDER_TILE_ARG_PATCH)
 			renderFaceUp  (tile, 0.0f, 0.0f, 0.0f, tile->getTexture(DIR_YNEG, data));
 			SHADE_IF_NEEDED(1.0f);
 			renderFaceDown(tile, 0.0f, 0.0f, 0.0f, tile->getTexture(DIR_YPOS, data));
-			SHADE_IF_NEEDED(0.6f);
+			SHADE_IF_NEEDED(shadeSideLight);
 			renderNorth   (tile, 0.0f, 0.0f, 0.0f, tile->getTexture(DIR_ZNEG, data));
 			renderSouth   (tile, 0.0f, 0.0f, 0.0f, tile->getTexture(DIR_ZPOS, data));
-			SHADE_IF_NEEDED(0.8f);
+			SHADE_IF_NEEDED(shadeSideDark);
 			renderWest    (tile, 0.0f, 0.0f, 0.0f, tile->getTexture(DIR_XNEG, data));
 			renderEast    (tile, 0.0f, 0.0f, 0.0f, tile->getTexture(DIR_XPOS, data));
 			SHADE_IF_NEEDED(1.0f);

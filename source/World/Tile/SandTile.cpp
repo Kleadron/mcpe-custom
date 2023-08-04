@@ -11,7 +11,7 @@
 #include "FallingTile.hpp"
 
 //@NOTE: True for now
-bool SandTile::instaFall = true;
+bool SandTile::instaFall = false;
 
 SandTile::SandTile(int ID, int texture, Material* pMtl) : Tile(ID, texture, pMtl)
 {

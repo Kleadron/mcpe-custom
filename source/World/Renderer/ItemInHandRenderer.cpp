@@ -62,7 +62,7 @@ void ItemInHandRenderer::renderItem(ItemInstance* inst)
 		m_pMinecraft->m_pTextures->loadAndBindTexture(C_TERRAIN_NAME);
 
 #ifdef ENH_SHADE_HELD_TILES
-#	define ARGPATCH , bright
+#	define ARGPATCH , bright, false
 #else
 #	define ARGPATCH
 #endif

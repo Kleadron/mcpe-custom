@@ -41,7 +41,7 @@ void TntRenderer::render(Entity* entity, float x, float y, float z, float a6, fl
 
 	// Render the base
 #ifdef ENH_SHADE_HELD_TILES
-#define ARGPATCH , 1.0f
+#define ARGPATCH , 1.0f, false
 #else
 #define ARGPATCH
 #endif

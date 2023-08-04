@@ -15,7 +15,7 @@
 #ifndef ENH_SHADE_HELD_TILES
 #define RENDER_TILE_ARG_PATCH
 #else
-#define RENDER_TILE_ARG_PATCH , float bright
+#define RENDER_TILE_ARG_PATCH , float bright, bool swapShadeSides
 #endif
 
 class TileRenderer

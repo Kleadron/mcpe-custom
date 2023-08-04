@@ -30,7 +30,7 @@ void FallingTileRenderer::render(Entity* entity, float x, float y, float z, floa
 
 	// Render the base
 #ifdef ENH_SHADE_HELD_TILES
-#define ARGPATCH , 1.0f
+#define ARGPATCH , entity->getBrightness(1.0f), false
 #else
 #define ARGPATCH
 #endif
