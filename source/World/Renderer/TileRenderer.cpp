@@ -2353,10 +2353,19 @@ LABEL_102:
 
 #ifdef ENH_SHADE_HELD_TILES
 
+// oak, spruce, and birch
 #define SHADE_PREPARE \
-	float red = bright, grn = bright, blu = bright; \
-	if (tile->m_ID == Tile::leaves->m_ID)           \
-		red *= 0.35f, grn *= 0.65f, blu *= 0.25f;
+	float red = bright, grn = bright, blu = bright;		\
+	if (tile->m_ID == Tile::leaves->m_ID)				\
+	{													\
+		if ((data & 3) == 0)							\
+			red *= 0.35f, grn *= 0.65f, blu *= 0.25f;   \
+		if ((data & 3) == 1)							\
+			red *= 0.38f, grn *= 0.6f, blu *= 0.38f;    \
+		if ((data & 3) == 2)							\
+			red *= 0.50f, grn *= 0.65f, blu *= 0.33f;   \
+	}													\
+	
 
 #define SHADE_IF_NEEDED(col) t.color(col*red,col*grn,col*blu,1.0f)
 

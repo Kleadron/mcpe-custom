@@ -34,6 +34,13 @@ int LeafTile::getColor(LevelSource* level, int x, int y, int z)
 #ifdef MOD_DONT_COLOR_GRASS
 	return 0xffffff;
 #endif
+	int data = level->getData(x, y, z);
+
+	if ((data & 3) == 1)
+		return 0x619961;
+	if ((data & 3) == 2)
+		return 0x80a755;
+
 	return 0x339933;
 }
 
