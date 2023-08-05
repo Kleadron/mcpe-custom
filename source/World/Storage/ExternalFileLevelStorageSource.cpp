@@ -10,7 +10,7 @@
 #include "ExternalFileLevelStorage.hpp"
 #include "Util.hpp"
 #ifdef _WIN32
-#include <shlobj_core.h>
+#include <shlobj.h>
 #endif
 
 #ifndef DEMO
