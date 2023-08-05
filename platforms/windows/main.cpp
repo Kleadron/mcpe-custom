@@ -11,7 +11,7 @@
 #include <windows.h>
 #include <WindowsX.h>
 //#include <dwmapi.h>
-#include <VersionHelpers.h>
+//#include <VersionHelpers.h>
 
 #include "compat/GL.hpp"
 #include "compat/AKeyCodes.hpp"
@@ -237,7 +237,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLin
 		LogMsg("%d: %d", i, random.nextInt(256 - i) + i);
 	}
 
-
+	if (std::string(lpCmdLine) == "-novsync")
+	{
+		wantVSync = false;
+	}
 
 	SetInstance(hInstance);
 
@@ -326,7 +329,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLin
 #ifdef USE_DWM_SYNC
 				BOOL enabled = FALSE;
 
-				if (hasDWM && IsWindowsVistaOrGreater() && SUCCEEDED(p_DwmIsCompositionEnabled(&enabled)) && enabled)
+				if (hasDWM && SUCCEEDED(p_DwmIsCompositionEnabled(&enabled)) && enabled)
 				{
 					xglSwapIntervalEXT(0);
 					p_DwmFlush();

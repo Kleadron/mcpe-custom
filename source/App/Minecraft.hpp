@@ -125,5 +125,8 @@ public:
 	bool field_DB1 = 0;
 	Screen* m_pScreen = nullptr;
 	int m_licenseID = -2;
+
+
+	int m_display_fps = 0;
 };
 

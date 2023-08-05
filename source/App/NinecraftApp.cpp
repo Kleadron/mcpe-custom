@@ -127,6 +127,7 @@ void NinecraftApp::updateStats()
 		}
 
 		field_2B0 = timeMs;
+		m_display_fps = m_fps;
 		m_fps = 0;
 	}
 }

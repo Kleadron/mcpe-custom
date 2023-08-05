@@ -303,6 +303,14 @@ void Gui::render(float f, bool bHaveScreen, int mouseX, int mouseY)
 		topEdge -= 9;
 	}
 
+	/*
+	Vec3 &pos = m_pLocalPlayer->m_pos;
+			printf("%d fps\t%3d chunk updates.   (%.2f, %.2f, %.2f)\n", m_fps, Chunk::updates, pos.x, pos.y, pos.z);
+			printf("%s", m_pLevelRenderer->gatherStats1().c_str());
+			Chunk::updates = 0;*/
+
+	m->m_pFont->drawShadow(std::to_string(m_pMinecraft->m_display_fps) + " fps", 0, 0, 0xFFFFFF);
+
 	glDisable(GL_BLEND);
 }
 
