@@ -103,6 +103,8 @@ NinecraftApp* g_pApp;
 bool g_LButtonDown, g_RButtonDown;
 int g_MousePosX, g_MousePosY;
 
+HDC hDC; HGLRC hRC;
+
 void UpdateMouse()
 {
 	Mouse::_x = g_MousePosX;
@@ -200,6 +202,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 
 			g_AppPlatform.setScreenSize(width, height);
 
+			if (g_pApp && hDC)
+			{
+				g_pApp->update();
+				SwapBuffers(hDC);
+			}
+
 			break;
 		}
 		case WM_KEYDOWN:
@@ -280,9 +288,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLin
 	ShowWindow(hWnd, nCmdShow);
 	SetHWND(hWnd);
 
-	int glVSync = 0;
-
-	HDC hDC; HGLRC hRC;
 	// enable OpenGL for the window
 	EnableOpenGL(hWnd, &hDC, &hRC);
 
@@ -291,7 +296,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLin
 	if (!xglInitted())
 		goto _cleanup;
 
-	xglSwapIntervalEXT(glVSync);
+	xglSwapIntervalEXT(0);
 
 	g_pApp = new NinecraftApp;
 	g_pApp->m_pPlatform = &g_AppPlatform;
